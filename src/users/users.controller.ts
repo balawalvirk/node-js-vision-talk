@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException, UseGuards, Put } from '@nestjs/common';
+import { Controller, Post, Body, BadRequestException, UseGuards, Put } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ChangePasswordDto } from './dto/change-pass.dto';
 import { UserDocument } from './user.schema';
@@ -22,7 +22,7 @@ export class UsersController {
   }
 
   @Put('update')
-  async setupProfile(@Body() updateUserDto: UpdateUserDto, @CurrentUser() user: UserDocument) {
+  async update(@Body() updateUserDto: UpdateUserDto, @CurrentUser() user: UserDocument) {
     return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, updateUserDto);
   }
 }
