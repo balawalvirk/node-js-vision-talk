@@ -25,22 +25,22 @@ export class CreateGoalDto {
   @IsString()
   achievedFeeling: string;
 
-  @IsString()
+  @IsString({ each: true })
   accomplishingCharacteristics: string[];
 
-  @IsString()
+  @IsString({ each: true })
   accomplishingRelationships: string[];
 
-  @IsString()
+  @IsString({ each: true })
   accomplishingCharacteristicsNeeded: string[];
 
-  @IsString()
+  @IsString({ each: true })
   accomplishingRelationshipsNeeded: string[];
 
   @IsArray()
   @ValidateNested({ each: true })
   @Type(() => SupportingGoal)
-  supportingGoals?: SupportingGoal[];
+  supportingGoals: SupportingGoal[];
 
   @IsString()
   image: string;
