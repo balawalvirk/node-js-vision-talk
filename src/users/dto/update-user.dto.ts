@@ -86,7 +86,7 @@ export class UpdateUserDto {
   PhoneNumber?: number;
 
   @IsOptional()
-  @IsDateString()
+  @IsString()
   degree?: string;
 
   @IsOptional()
