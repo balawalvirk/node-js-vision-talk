@@ -52,6 +52,12 @@ export class Goal {
 
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
+
+  @Prop()
+  isGoalPublic: boolean;
+
+  @Prop()
+  GoalDetails: string;
 }
 
 export const GoalSchema = SchemaFactory.createForClass(Goal);

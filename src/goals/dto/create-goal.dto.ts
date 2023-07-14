@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsArray, IsDateString, IsString, ValidateNested } from 'class-validator';
+import { IsArray, IsBoolean, IsDateString, IsString, ValidateNested } from 'class-validator';
 
 class SupportingGoal {
   @IsString()
@@ -44,4 +44,10 @@ export class CreateGoalDto {
 
   @IsString()
   image: string;
+
+  @IsBoolean()
+  isGoalPublic?: boolean;
+
+  @IsString()
+  GoalDetails?: string;
 }
