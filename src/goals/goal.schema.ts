@@ -47,7 +47,7 @@ export class Goal {
   @Prop({ required: true, type: [supportingGoalSchema] })
   supportingGoals: SupportingGoal[];
 
-  @Prop({ required: true })
+  @Prop()
   image: string;
 
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
