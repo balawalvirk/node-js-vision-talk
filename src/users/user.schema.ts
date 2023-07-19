@@ -103,7 +103,7 @@ export class User {
   degree: string;
 
   @Prop()
-  phoneNumber: number;
+  phoneNumber: string;
 
   @Prop({ type: lifeGoalsSchema })
   lifeGoals: LifeGoals;

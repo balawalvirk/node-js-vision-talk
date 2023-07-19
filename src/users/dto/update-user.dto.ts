@@ -82,8 +82,8 @@ export class UpdateUserDto {
   avatar?: string;
 
   @IsOptional()
-  @IsNumber()
-  PhoneNumber?: number;
+  @IsString()
+  PhoneNumber?: string;
 
   @IsOptional()
   @IsString()
