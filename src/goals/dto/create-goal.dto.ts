@@ -44,7 +44,11 @@ export class CreateGoalDto {
 
   @IsOptional()
   @IsString()
-  image: string;
+  image?: string;
+
+  @IsOptional()
+  @IsString({ each: true })
+  images?: string[];
 
   @IsOptional()
   @IsBoolean()
