@@ -50,6 +50,9 @@ export class Goal {
   @Prop()
   image: string;
 
+  @Prop({ type: [String] })
+  images: string[];
+
   @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   user: User;
 
