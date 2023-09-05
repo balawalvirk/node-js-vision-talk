@@ -1,3 +1,7 @@
+
+require('module-alias/register');
+
+
 import { ValidationPipe, VersioningType } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
