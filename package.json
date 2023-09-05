@@ -11,6 +11,7 @@
     "start": "nest start",
     "start:dev": "cp .env.dev .env && nest start --watch",
     "start:debug": "nest start --debug --watch",
+    "start:new":"--require ts-node/register -r dotenv/config D://ractice/node-js-vision-talk/src/main.ts",
     "start:prod": "node dist/main",
     "build:stag": "git push heroku master",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",

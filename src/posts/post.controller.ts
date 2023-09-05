@@ -23,7 +23,7 @@ export class PostController {
     }
 
 
-    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile(process.env.AWS_BUCKET_NAME) }))
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
     @Post('/')
     async create(@UploadedFile(new ParseFilePipe(
         {fileIsRequired: true,
