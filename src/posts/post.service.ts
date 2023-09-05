@@ -2,11 +2,12 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import mongoose, {Model} from 'mongoose';
 import {PostDocument} from "src/posts/models/posts.model";
-import {CreatePostComment, CreatePostDto} from "src/posts/dtos/posts.dto";
+import {CreatePostComment, CreatePostDto, CreatePostFilterDto} from "src/posts/dtos/posts.dto";
 import {errorResponse, successResponse} from "src/utils/response";
 import {User, UserDocument} from "src/users/user.schema";
 import {PostLikeDocument} from "src/posts/models/likes.model";
 import {PostCommentDocument} from "src/posts/models/comments.model";
+import {OrderByEnum} from "src/enums/posts.enum";
 
 @Injectable()
 export class PostService {
@@ -145,6 +146,60 @@ export class PostService {
 
         return successResponse(200, 'post', post);
     }
+
+
+
+    async getFilteredPosts(userId:string,body: CreatePostFilterDto) {
+
+        let query={};
+
+        if(body.category) query={...query,category:body.category}
+
+        if(body.type) query={...query,type:body.type};
+
+        const post = await this.postsModel.aggregate([
+            {$match: {...query}},
+
+            {
+                $lookup: {
+                    from: "post-likes",
+                    let: {post: '$_id'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$post', '$$post']},
+                                        {$eq: ['$user', userId]}
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'like_data'
+                },
+            },
+            {
+                $addFields: {
+                    own_like: {$cond: {if: {$gt:[{$size:"$like_data"}, 0]}, then: true, else: false}}
+
+                }
+            },
+            { $unset: [ "like_data" ] },
+            {$sort: {date_created: (body.order_by || OrderByEnum.DESCENDING)===OrderByEnum.DESCENDING?-1:1}}
+
+        ])
+
+
+        if(!post)
+            return errorResponse(404, 'post not found');
+
+        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email"});
+
+
+        return successResponse(200, 'post', post);
+    }
+
 
 
     async postComment(body: CreatePostComment, user:string,postId:string) {

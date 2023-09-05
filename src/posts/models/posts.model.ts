@@ -31,6 +31,10 @@ export class Post {
     @Prop({ type: Number,default:0 })
     likes_count;
 
+
+    @Prop({ type: Date,default:Date.now })
+    date_created;
+
 }
 
 export const PostSchema = SchemaFactory.createForClass(Post);

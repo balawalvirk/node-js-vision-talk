@@ -1,5 +1,5 @@
-import {IsEnum, IsNotEmpty, IsString, IsUUID} from 'class-validator';
-import {PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
+import {IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator';
+import {OrderByEnum, PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
 
 export class CreatePostDto {
 
@@ -24,5 +24,27 @@ export class CreatePostComment {
     @IsString()
     @IsNotEmpty()
     message;
+
+}
+
+
+
+export class CreatePostFilterDto {
+
+    @IsOptional()
+    @IsEnum(PostCategoryEnum)
+    @IsString()
+    category;
+
+    @IsOptional()
+    @IsEnum(PostTypeEnum)
+    @IsString()
+    type;
+
+
+    @IsOptional()
+    @IsEnum(OrderByEnum)
+    @IsString()
+    order_by;
 
 }

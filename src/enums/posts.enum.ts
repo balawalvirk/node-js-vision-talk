@@ -19,4 +19,10 @@ export enum PostTypeEnum {
 }
 
 
+export enum OrderByEnum {
+    ASCENDING = 'ascending',
+    DESCENDING = 'descending',
+    DEFAULT = 'default',
+
+}
 

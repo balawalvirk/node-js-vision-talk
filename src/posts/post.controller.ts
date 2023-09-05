@@ -9,7 +9,7 @@ import {
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import {CreatePostComment, CreatePostDto} from "src/posts/dtos/posts.dto";
+import {CreatePostComment, CreatePostDto, CreatePostFilterDto} from "src/posts/dtos/posts.dto";
 import {PostService} from "src/posts/post.service";
 import FileUploadToS3 from "src/utils/FileUploadToS3";
 import {FileInterceptor} from "@nestjs/platform-express";
@@ -80,4 +80,10 @@ export class PostController {
         return response;
     }
 
+
+    @Post('/filtered-posts')
+    async filteredPost(@Body() body: CreatePostFilterDto,@Request() req) {
+        const response = await this.postService.getFilteredPosts(req.user._id,body);
+        return response;
+    }
 }
