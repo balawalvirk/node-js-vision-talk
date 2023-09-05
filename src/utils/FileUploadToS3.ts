@@ -5,13 +5,13 @@ import * as AWS from 'aws-sdk'
 export default class FileUploadToS3 {
 
 
-    static uploadFile() {
+    static uploadFile(bucketName) {
         return multerS3({
             s3: new AWS.S3({
                 accessKeyId: process.env.AWS_ACCESS_KEY,
                 secretAccessKey: process.env.AWS_SECRET_KEY,
             }),
-            bucket: process.env.AWS_BUCKET_NAME,
+            bucket: bucketName,
             transforms: [
                 {
                     id: 'original',
