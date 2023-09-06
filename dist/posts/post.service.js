@@ -62,7 +62,7 @@ let PostService = exports.PostService = class PostService {
         ]);
         if (!post)
             return (0, response_1.errorResponse)(404, 'post not found');
-        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email" });
+        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email avatar" });
         return (0, response_1.successResponse)(200, 'post', post);
     }
     async getUserPosts(userId) {
@@ -112,9 +112,9 @@ let PostService = exports.PostService = class PostService {
         ]);
         if (!post)
             return (0, response_1.errorResponse)(404, 'post not found');
-        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email" });
-        await this.postsModel.populate(post, { path: "comments.user", model: "User", select: "firstName lastName email" });
-        await this.postsModel.populate(post, { path: "comments.replies.user", model: "User", select: "firstName lastName email" });
+        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email avatar" });
+        await this.postsModel.populate(post, { path: "comments.user", model: "User", select: "firstName lastName email avatar" });
+        await this.postsModel.populate(post, { path: "comments.replies.user", model: "User", select: "firstName lastName email avatar" });
         return (0, response_1.successResponse)(200, 'post', post);
     }
     async getFilteredPosts(userId, body) {
@@ -154,7 +154,7 @@ let PostService = exports.PostService = class PostService {
         ]);
         if (!post)
             return (0, response_1.errorResponse)(404, 'post not found');
-        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email" });
+        await this.postsModel.populate(post, { path: "user", select: "firstName lastName email avatar" });
         return (0, response_1.successResponse)(200, 'post', post);
     }
     async postComment(body, user, postId) {

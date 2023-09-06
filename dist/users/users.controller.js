@@ -21,6 +21,8 @@ const helpers_1 = require("../helpers");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const update_user_dto_1 = require("./dto/update-user.dto");
 const user_dto_1 = require("./dto/user.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const FileUploadToS3_1 = require("../utils/FileUploadToS3");
 let UsersController = exports.UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -33,8 +35,8 @@ let UsersController = exports.UsersController = class UsersController {
         await this.usersService.findOneRecordAndUpdate({ _id: user._id }, { password: await (0, bcrypt_1.hash)(newPassword, 10) });
         return 'Password changed successfully.';
     }
-    async update(updateUserDto, user) {
-        return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, updateUserDto);
+    async update(file, updateUserDto, user) {
+        return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, Object.assign(Object.assign({}, updateUserDto), { avatar: file.location || user.avatar }));
     }
     async addFollower(body, req) {
         return await this.usersService.addFollower(req.user._id, body);
@@ -64,11 +66,13 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "changePassword", null);
 __decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
     (0, common_1.Put)('update'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, helpers_1.CurrentUser)()),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: false }))),
+    __param(1, (0, common_1.Body)(new common_1.ValidationPipe({ transform: true }))),
+    __param(2, (0, helpers_1.CurrentUser)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [update_user_dto_1.UpdateUserDto, Object]),
+    __metadata("design:paramtypes", [Object, update_user_dto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([

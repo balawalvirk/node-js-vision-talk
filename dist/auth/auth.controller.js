@@ -23,6 +23,8 @@ const helpers_1 = require("../helpers");
 const reset_pass_dto_1 = require("./dtos/reset-pass.dto");
 const email_service_1 = require("../helpers/services/email.service");
 const forgot_pass_dto_1 = require("./dtos/forgot-pass.dto");
+const platform_express_1 = require("@nestjs/platform-express");
+const FileUploadToS3_1 = require("../utils/FileUploadToS3");
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService, userService, emailService) {
         this.authService = authService;
@@ -33,11 +35,11 @@ let AuthController = exports.AuthController = class AuthController {
         const { access_token } = await this.authService.login(user);
         return { access_token, user };
     }
-    async register(registerDto) {
+    async register(file, registerDto) {
         const emailExists = await this.userService.findOneRecord({ email: registerDto.email });
         if (emailExists)
             throw new common_1.BadRequestException('User already exists with this email.');
-        const user = await this.userService.createRecord(Object.assign(Object.assign({}, registerDto), { password: await (0, bcrypt_1.hash)(registerDto.password, 10) }));
+        const user = await this.userService.createRecord(Object.assign(Object.assign({}, registerDto), { avatar: (file === null || file === void 0 ? void 0 : file.location) || "", password: await (0, bcrypt_1.hash)(registerDto.password, 10) }));
         const { access_token } = await this.authService.login(user);
         return { access_token, user };
     }
@@ -80,10 +82,12 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
     (0, common_1.Post)('register'),
-    __param(0, (0, common_1.Body)()),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: false }))),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [register_dto_1.RegisterDto]),
+    __metadata("design:paramtypes", [Object, register_dto_1.RegisterDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 __decorate([

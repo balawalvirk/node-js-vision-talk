@@ -41,7 +41,7 @@ export declare class AuthController {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
     }>;
-    register(registerDto: RegisterDto): Promise<{
+    register(file: any, registerDto: RegisterDto): Promise<{
         access_token: string;
         user: import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
             _id: import("mongoose").Types.ObjectId;

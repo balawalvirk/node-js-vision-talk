@@ -129,18 +129,21 @@ __decorate([
 ], UpdateUserDto.prototype, "degree", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => JSON.parse(value)),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => PointsOfClarity),
     __metadata("design:type", PointsOfClarity)
 ], UpdateUserDto.prototype, "pointsOfClarity", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => JSON.parse(value)),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => LifeGoals),
     __metadata("design:type", LifeGoals)
 ], UpdateUserDto.prototype, "lifeGoals", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ value }) => JSON.parse(value)),
     (0, class_validator_1.ValidateNested)({ each: true }),
     (0, class_transformer_1.Type)(() => FocusList),
     __metadata("design:type", FocusList)

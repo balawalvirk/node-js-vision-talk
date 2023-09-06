@@ -69,8 +69,8 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
     }
     async getUserById(userId) {
         const user = await this.userModal.findById(userId)
-            .populate("followers", 'firstName lastName email', user_schema_1.User.name)
-            .populate("followings", "firstName lastName email", user_schema_1.User.name);
+            .populate("followers", 'firstName lastName email avatar', user_schema_1.User.name)
+            .populate("followings", "firstName lastName email avatar", user_schema_1.User.name);
         return (0, response_1.successResponse)(200, 'post', user);
     }
 };

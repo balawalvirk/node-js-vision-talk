@@ -32,7 +32,7 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     changePassword({ newPassword, oldPassword }: ChangePasswordDto, user: UserDocument): Promise<string>;
-    update(updateUserDto: UpdateUserDto, user: UserDocument): Promise<import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./user.schema").User> & Omit<import("./user.schema").User & {
+    update(file: any, updateUserDto: UpdateUserDto, user: UserDocument): Promise<import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./user.schema").User> & Omit<import("./user.schema").User & {
         _id: import("mongoose").Types.ObjectId;
     }, never>> & Omit<import("mongoose").Document<unknown, {}, import("./user.schema").User> & Omit<import("./user.schema").User & {
         _id: import("mongoose").Types.ObjectId;
