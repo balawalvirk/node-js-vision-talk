@@ -20,6 +20,7 @@ const bcrypt_1 = require("bcrypt");
 const helpers_1 = require("../helpers");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
 const update_user_dto_1 = require("./dto/update-user.dto");
+const user_dto_1 = require("./dto/user.dto");
 let UsersController = exports.UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
@@ -34,6 +35,24 @@ let UsersController = exports.UsersController = class UsersController {
     }
     async update(updateUserDto, user) {
         return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, updateUserDto);
+    }
+    async addFollower(body, req) {
+        return await this.usersService.addFollower(req.user._id, body);
+    }
+    async addFollowing(body, req) {
+        return await this.usersService.addFollowing(req.user._id, body);
+    }
+    async deleteFollower(followerId, req) {
+        return await this.usersService.deleteFollower(req.user._id, followerId);
+    }
+    async deleteFollowing(followingId, req) {
+        return await this.usersService.deleteFollowing(req.user._id, followingId);
+    }
+    async getMe(req) {
+        return await this.usersService.getUserById(req.user._id);
+    }
+    async getUserById(id) {
+        return await this.usersService.getUserById(id);
     }
 };
 __decorate([
@@ -52,6 +71,52 @@ __decorate([
     __metadata("design:paramtypes", [update_user_dto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
+__decorate([
+    (0, common_1.Post)('follower'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.CreateFollowerFollowingDto, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addFollower", null);
+__decorate([
+    (0, common_1.Post)('following'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_dto_1.CreateFollowerFollowingDto, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addFollowing", null);
+__decorate([
+    (0, common_1.Delete)('follower/:followerId'),
+    __param(0, (0, common_1.Param)('followerId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteFollower", null);
+__decorate([
+    (0, common_1.Delete)('following/:followingId'),
+    __param(0, (0, common_1.Param)('followingId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteFollowing", null);
+__decorate([
+    (0, common_1.Get)('me'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getMe", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    __param(0, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getUserById", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

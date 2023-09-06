@@ -18,6 +18,7 @@ const mongoose_1 = require("@nestjs/mongoose");
 const mongoose_2 = require("mongoose");
 const base_service_1 = require("../helpers/services/base.service");
 const user_schema_1 = require("./user.schema");
+const response_1 = require("../utils/response");
 let UsersService = exports.UsersService = class UsersService extends base_service_1.BaseService {
     constructor(userModal) {
         super(userModal);
@@ -25,6 +26,52 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
     }
     async findOne(query) {
         return await this.userModal.findOne(query).lean();
+    }
+    async addFollower(userId, body) {
+        const user = await this.userModal.findById(userId);
+        const findFollowerIndex = (user.followers || []).findIndex((follower) => follower.toString() === body.user);
+        if (findFollowerIndex !== -1) {
+            return (0, response_1.errorResponse)(400, 'Already added in followers list.');
+        }
+        (user.followers).push(body.user);
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'post', saveUser);
+    }
+    async addFollowing(userId, body) {
+        const user = await this.userModal.findById(userId);
+        const findFollowerIndex = (user.followings || []).findIndex((following) => following.toString() === body.user);
+        if (findFollowerIndex !== -1) {
+            return (0, response_1.errorResponse)(400, 'Already added in following list.');
+        }
+        (user.followings).push(body.user);
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'post', saveUser);
+    }
+    async deleteFollower(userId, followerId) {
+        const user = await this.userModal.findById(userId);
+        const findFollowerIndex = (user.followers || []).findIndex((follower) => follower.toString() === followerId);
+        if (findFollowerIndex === -1) {
+            return (0, response_1.errorResponse)(404, 'Follower not exist.');
+        }
+        user.followers = (user.followers || []).filter((follower) => (follower).toString() !== followerId.toString());
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'post', saveUser);
+    }
+    async deleteFollowing(userId, followingId) {
+        const user = await this.userModal.findById(userId);
+        const findFollowingIndex = (user.followings || []).findIndex((following) => following.toString() === followingId.toString());
+        if (findFollowingIndex === -1) {
+            return (0, response_1.errorResponse)(404, 'Following not exist.');
+        }
+        user.followings = (user.followings || []).filter((following) => (following).toString() !== followingId.toString());
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'post', saveUser);
+    }
+    async getUserById(userId) {
+        const user = await this.userModal.findById(userId)
+            .populate("followers", 'firstName lastName email', user_schema_1.User.name)
+            .populate("followings", "firstName lastName email", user_schema_1.User.name);
+        return (0, response_1.successResponse)(200, 'post', user);
     }
 };
 exports.UsersService = UsersService = __decorate([

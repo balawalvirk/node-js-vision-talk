@@ -184,6 +184,7 @@ export declare class LocalStrategy extends LocalStrategy_base {
             }): import("mongoose").Error.ValidationError;
             (pathsToValidate?: import("mongoose").PathsToValidate, options?: import("mongoose").AnyObject): import("mongoose").Error.ValidationError;
         };
+        followers: any;
         email: string;
         firstName: string;
         lastName: string;
@@ -217,6 +218,7 @@ export declare class LocalStrategy extends LocalStrategy_base {
             affirmation9: string;
             affirmation10: string;
         }>;
+        followings: any;
     }>;
 }
 export {};

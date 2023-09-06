@@ -190,6 +190,7 @@ export declare class AuthService {
             }): import("mongoose").Error.ValidationError;
             (pathsToValidate?: import("mongoose").PathsToValidate, options?: import("mongoose").AnyObject): import("mongoose").Error.ValidationError;
         };
+        followers: any;
         email: string;
         firstName: string;
         lastName: string;
@@ -223,6 +224,7 @@ export declare class AuthService {
             affirmation9: string;
             affirmation10: string;
         }>;
+        followings: any;
     }>;
     login(user: UserDocument): Promise<{
         access_token: string;

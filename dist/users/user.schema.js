@@ -8,10 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var User_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const types_1 = require("../types");
+const mongoose = require("mongoose");
 let LifeGoals = class LifeGoals {
 };
 __decorate([
@@ -106,7 +108,7 @@ FocusList = __decorate([
     (0, mongoose_1.Schema)({ versionKey: false, _id: false })
 ], FocusList);
 const FocusListSchema = mongoose_1.SchemaFactory.createForClass(FocusList);
-let User = exports.User = class User {
+let User = exports.User = User_1 = class User {
 };
 __decorate([
     (0, mongoose_1.Prop)({ required: true, lowercase: true, trim: true }),
@@ -156,7 +158,21 @@ __decorate([
     (0, mongoose_1.Prop)({ type: FocusListSchema }),
     __metadata("design:type", FocusList)
 ], User.prototype, "focusList", void 0);
-exports.User = User = __decorate([
+__decorate([
+    (0, mongoose_1.Prop)([{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: User_1.name
+        }]),
+    __metadata("design:type", Object)
+], User.prototype, "followers", void 0);
+__decorate([
+    (0, mongoose_1.Prop)([{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: User_1.name
+        }]),
+    __metadata("design:type", Object)
+], User.prototype, "followings", void 0);
+exports.User = User = User_1 = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], User);
 exports.UserSchema = mongoose_1.SchemaFactory.createForClass(User);

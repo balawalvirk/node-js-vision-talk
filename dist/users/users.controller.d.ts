@@ -27,6 +27,7 @@ import { UsersService } from './users.service';
 import { ChangePasswordDto } from './dto/change-pass.dto';
 import { UserDocument } from './user.schema';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateFollowerFollowingDto } from "src/users/dto/user.dto";
 export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
@@ -38,4 +39,40 @@ export declare class UsersController {
     }, never> & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>, never>>;
+    addFollower(body: CreateFollowerFollowingDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    addFollowing(body: CreateFollowerFollowingDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    deleteFollower(followerId: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    deleteFollowing(followingId: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    getMe(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    getUserById(id: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }
