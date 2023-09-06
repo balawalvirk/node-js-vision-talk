@@ -71,7 +71,7 @@ export class PostService {
         if(!post)
             return errorResponse(404, 'post not found');
 
-        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email"});
+        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email avatar"});
 
 
         return successResponse(200, 'post', post);
@@ -139,9 +139,9 @@ export class PostService {
         if(!post)
             return errorResponse(404, 'post not found');
 
-        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email"});
-        await this.postsModel.populate(post, {path: "comments.user",model:"User",select:"firstName lastName email"});
-        await this.postsModel.populate(post, {path: "comments.replies.user",model:"User",select:"firstName lastName email"});
+        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email avatar"});
+        await this.postsModel.populate(post, {path: "comments.user",model:"User",select:"firstName lastName email avatar"});
+        await this.postsModel.populate(post, {path: "comments.replies.user",model:"User",select:"firstName lastName email avatar"});
 
 
         return successResponse(200, 'post', post);
@@ -194,7 +194,7 @@ export class PostService {
         if(!post)
             return errorResponse(404, 'post not found');
 
-        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email"});
+        await this.postsModel.populate(post, {path: "user",select:"firstName lastName email avatar"});
 
 
         return successResponse(200, 'post', post);

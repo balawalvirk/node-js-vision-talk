@@ -1,4 +1,16 @@
-import {Controller, Post, Body, BadRequestException, UseGuards, Put, Request, Delete, Param, Get} from '@nestjs/common';
+import {
+    Controller,
+    Post,
+    Body,
+    BadRequestException,
+    UseGuards,
+    Put,
+    Request,
+    Delete,
+    Param,
+    Get,
+    UseInterceptors, UploadedFile, ParseFilePipe, ValidationPipe
+} from '@nestjs/common';
 import {UsersService} from './users.service';
 import {ChangePasswordDto} from './dto/change-pass.dto';
 import {UserDocument} from './user.schema';
@@ -8,6 +20,8 @@ import {JwtAuthGuard} from 'src/auth/jwt-auth.guard';
 import {UpdateUserDto} from './dto/update-user.dto';
 import {CreatePostFilterDto} from "src/posts/dtos/posts.dto";
 import {CreateFollowerFollowingDto} from "src/users/dto/user.dto";
+import {FileInterceptor} from "@nestjs/platform-express";
+import FileUploadToS3 from "src/utils/FileUploadToS3";
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -24,9 +38,15 @@ export class UsersController {
         return 'Password changed successfully.';
     }
 
+
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
     @Put('update')
-    async update(@Body() updateUserDto: UpdateUserDto, @CurrentUser() user: UserDocument) {
-        return await this.usersService.findOneRecordAndUpdate({_id: user._id}, updateUserDto);
+    async update(@UploadedFile(new ParseFilePipe({fileIsRequired: false})) file: any,
+                 @Body(new ValidationPipe({transform: true})) updateUserDto: UpdateUserDto, @CurrentUser() user: UserDocument) {
+
+
+
+        return await this.usersService.findOneRecordAndUpdate({_id: user._id}, {...updateUserDto,avatar:file.location || user.avatar});
     }
 
     @Post('follower')

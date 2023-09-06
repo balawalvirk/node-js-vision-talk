@@ -71,8 +71,8 @@ export class UsersService extends BaseService<UserDocument> {
 
     async getUserById(userId: string) {
         const user = await this.userModal.findById(userId)
-            .populate("followers",'firstName lastName email',User.name)
-            .populate("followings","firstName lastName email",User.name);
+            .populate("followers",'firstName lastName email avatar',User.name)
+            .populate("followings","firstName lastName email avatar",User.name);
         return successResponse(200, 'post', user);
 
     }
