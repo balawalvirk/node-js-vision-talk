@@ -219,6 +219,8 @@ export declare class LocalStrategy extends LocalStrategy_base {
             affirmation10: string;
         }>;
         followings: any;
+        connection_status: any;
+        last_seen: any;
     }>;
 }
 export {};

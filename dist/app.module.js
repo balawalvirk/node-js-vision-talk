@@ -14,17 +14,28 @@ const auth_module_1 = require("./auth/auth.module");
 const users_module_1 = require("./users/users.module");
 const goals_module_1 = require("./goals/goals.module");
 const post_module_1 = require("./posts/post.module");
+const redisStore = require("cache-manager-redis-store");
+const chat_module_1 = require("./chat/chat.module");
+const socket_module_1 = require("./socket/socket.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot({ isGlobal: true }),
+            common_1.CacheModule.register({
+                isGlobal: true,
+                store: redisStore,
+                host: 'localhost',
+                port: 6379
+            }),
             mongoose_1.MongooseModule.forRoot(new config_1.ConfigService().get('MONGO_URI')),
             users_module_1.UsersModule,
             auth_module_1.AuthModule,
             goals_module_1.GoalsModule,
-            post_module_1.PostModule
+            post_module_1.PostModule,
+            chat_module_1.ChatModule,
+            socket_module_1.SocketModule
         ],
     })
 ], AppModule);

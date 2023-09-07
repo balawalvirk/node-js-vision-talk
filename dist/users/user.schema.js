@@ -14,6 +14,7 @@ exports.UserSchema = exports.User = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const types_1 = require("../types");
 const mongoose = require("mongoose");
+const chat_enum_1 = require("../enums/chat.enum");
 let LifeGoals = class LifeGoals {
 };
 __decorate([
@@ -172,6 +173,14 @@ __decorate([
         }]),
     __metadata("design:type", Object)
 ], User.prototype, "followings", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: String, enum: chat_enum_1.STATUS, default: chat_enum_1.STATUS.OFFLINE }),
+    __metadata("design:type", Object)
+], User.prototype, "connection_status", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
+    __metadata("design:type", Object)
+], User.prototype, "last_seen", void 0);
 exports.User = User = User_1 = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], User);

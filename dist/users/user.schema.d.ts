@@ -41,6 +41,8 @@ export declare class User {
     focusList: FocusList;
     followers: any;
     followings: any;
+    connection_status: any;
+    last_seen: any;
 }
 export declare const UserSchema: mongoose.Schema<User, mongoose.Model<User, any, any, any, mongoose.Document<unknown, any, User> & Omit<User & {
     _id: mongoose.Types.ObjectId;
