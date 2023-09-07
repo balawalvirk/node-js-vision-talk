@@ -2,6 +2,7 @@ import {Prop, Schema, SchemaFactory} from '@nestjs/mongoose';
 import {HydratedDocument} from 'mongoose';
 import {AuthTypes} from 'src/types';
 import * as mongoose from "mongoose";
+import {ChatMessageTypeEnum, STATUS} from "src/enums/chat.enum";
 
 export type UserDocument = HydratedDocument<User>;
 
@@ -126,6 +127,13 @@ export class User {
         ref: User.name
     }])
     followings;
+
+
+    @Prop({ type: String,enum: STATUS, default: STATUS.OFFLINE })
+    connection_status;
+
+    @Prop({ type: Date,default:Date.now })
+    last_seen;
 
 }
 
