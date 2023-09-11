@@ -46,7 +46,7 @@ export class UsersController {
 
 
 
-        return await this.usersService.findOneRecordAndUpdate({_id: user._id}, {...updateUserDto,avatar:file.location || user.avatar});
+        return await this.usersService.findOneRecordAndUpdate({_id: user._id}, {...updateUserDto,avatar:file?.location || user.avatar});
     }
 
     @Post('follower')
