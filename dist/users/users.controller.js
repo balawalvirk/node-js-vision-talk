@@ -36,7 +36,7 @@ let UsersController = exports.UsersController = class UsersController {
         return 'Password changed successfully.';
     }
     async update(file, updateUserDto, user) {
-        return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, Object.assign(Object.assign({}, updateUserDto), { avatar: file.location || user.avatar }));
+        return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, Object.assign(Object.assign({}, updateUserDto), { avatar: (file === null || file === void 0 ? void 0 : file.location) || user.avatar }));
     }
     async addFollower(body, req) {
         return await this.usersService.addFollower(req.user._id, body);
