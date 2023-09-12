@@ -143,6 +143,12 @@ export class ChatService {
     }
 
     async createSession(userId: string, body: CreateSessionDto) {
+
+        const previousSession=await this.contactsModel.findOne({$or:[{user: userId, contact: body.contact},
+                {user: userId, contact: body.contact}]})
+
+        if(previousSession) return successResponse(200, 'session', previousSession);
+
         const session = new this.contactsModel({user: userId, contact: body.contact});
         const saveSession = await session.save();
 
