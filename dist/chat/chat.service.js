@@ -116,6 +116,10 @@ let ChatService = exports.ChatService = class ChatService {
         return (0, response_1.successResponse)(200, 'create group', saveGroup);
     }
     async createSession(userId, body) {
+        const previousSession = await this.contactsModel.findOne({ $or: [{ user: userId, contact: body.contact },
+                { user: userId, contact: body.contact }] });
+        if (previousSession)
+            return (0, response_1.successResponse)(200, 'session', previousSession);
         const session = new this.contactsModel({ user: userId, contact: body.contact });
         const saveSession = await session.save();
         return (0, response_1.successResponse)(200, 'create session', saveSession);
