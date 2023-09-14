@@ -15,3 +15,6 @@ export declare class CreateGroupDto {
     users: string[];
     name: any;
 }
+export declare class AddRemoveUserGroupDto {
+    userId: any;
+}

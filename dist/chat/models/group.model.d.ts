@@ -3,6 +3,7 @@ import * as mongoose from "mongoose";
 export type GroupDocument = Group & Document;
 export declare class Group {
     users: any;
+    createdBy: any;
     name: any;
     avatar: any;
     last_message: any;

@@ -60,6 +60,14 @@ let ChatController = exports.ChatController = class ChatController {
         const response = await this.chatService.getGroupMessage(sessionId);
         return response;
     }
+    async addGroupInMember(body, groupId, req) {
+        const response = await this.chatService.addNewUserInGroup(req.user._id, groupId, body);
+        return response;
+    }
+    async removeGroupMember(body, groupId, req) {
+        const response = await this.chatService.removeUserFromGroup(req.user._id, groupId, body);
+        return response;
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
@@ -135,6 +143,24 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "getGroupMessages", null);
+__decorate([
+    (0, common_1.Put)('/group/:groupId/add-member'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('groupId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [chat_dto_1.AddRemoveUserGroupDto, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "addGroupInMember", null);
+__decorate([
+    (0, common_1.Put)('/group/:groupId/remove-member'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('groupId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [chat_dto_1.AddRemoveUserGroupDto, String, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "removeGroupMember", null);
 exports.ChatController = ChatController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('chat'),

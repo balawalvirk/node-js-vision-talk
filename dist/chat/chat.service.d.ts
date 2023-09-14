@@ -3,7 +3,7 @@ import { UserDocument } from "src/users/user.schema";
 import { ContactDocument } from "./models/contacts.model";
 import { GroupDocument } from "./models/group.model";
 import { ChatDocument } from "./models/chat.model";
-import { CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto } from "src/chat/dto/chat.dto";
+import { AddRemoveUserGroupDto, CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto } from "src/chat/dto/chat.dto";
 import { SocketService } from "src/socket/socket.service";
 import Cache from 'cache-manager';
 export declare class ChatService {
@@ -27,6 +27,18 @@ export declare class ChatService {
         data: any;
     }>;
     createGroup(userId: string, body: CreateGroupDto, avatar: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    addNewUserInGroup(userId: string, groupId: string, body: AddRemoveUserGroupDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    removeUserFromGroup(userId: string, groupId: string, body: AddRemoveUserGroupDto): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

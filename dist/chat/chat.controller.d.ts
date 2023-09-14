@@ -1,6 +1,6 @@
 import { CreatePostDto } from "src/posts/dtos/posts.dto";
 import { ChatService } from "src/chat/chat.service";
-import { CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto } from "src/chat/dto/chat.dto";
+import { AddRemoveUserGroupDto, CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto } from "src/chat/dto/chat.dto";
 export declare class ChatController {
     private chatService;
     constructor(chatService: ChatService);
@@ -53,6 +53,18 @@ export declare class ChatController {
         data: any;
     }>;
     getGroupMessages(sessionId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    addGroupInMember(body: AddRemoveUserGroupDto, groupId: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    removeGroupMember(body: AddRemoveUserGroupDto, groupId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

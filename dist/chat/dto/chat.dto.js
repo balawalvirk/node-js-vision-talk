@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreateGroupDto = exports.CreateSessionDto = exports.CreateGroupMessageDto = exports.CreateChatDto = void 0;
+exports.AddRemoveUserGroupDto = exports.CreateGroupDto = exports.CreateSessionDto = exports.CreateGroupMessageDto = exports.CreateChatDto = void 0;
 const class_validator_1 = require("class-validator");
 const chat_enum_1 = require("../../enums/chat.enum");
 const class_transformer_1 = require("class-transformer");
@@ -72,4 +72,12 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Object)
 ], CreateGroupDto.prototype, "name", void 0);
+class AddRemoveUserGroupDto {
+}
+exports.AddRemoveUserGroupDto = AddRemoveUserGroupDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Object)
+], AddRemoveUserGroupDto.prototype, "userId", void 0);
 //# sourceMappingURL=chat.dto.js.map

@@ -23,6 +23,10 @@ __decorate([
     __metadata("design:type", Object)
 ], Group.prototype, "users", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: mongoose.Schema.Types.ObjectId, ref: user_schema_1.User.name }),
+    __metadata("design:type", Object)
+], Group.prototype, "createdBy", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)
 ], Group.prototype, "name", void 0);

@@ -111,13 +111,37 @@ let ChatService = exports.ChatService = class ChatService {
     }
     async createGroup(userId, body, avatar) {
         (body.users).push(userId.toString());
-        const group = new this.groupsModel({ users: body.users, name: body.name, avatar });
+        const group = new this.groupsModel({ users: body.users, name: body.name, avatar, createdBy: userId });
+        const saveGroup = await group.save();
+        return (0, response_1.successResponse)(200, 'create group', saveGroup);
+    }
+    async addNewUserInGroup(userId, groupId, body) {
+        const group = await this.groupsModel.findById(groupId);
+        if (!group)
+            return (0, response_1.errorResponse)(404, 'group not found');
+        const findIndex = (group.users).findIndex((user) => user.toString() === (body.userId).toString());
+        if (findIndex !== -1)
+            return (0, response_1.errorResponse)(400, 'already added in group');
+        (group.users).push(body.userId);
+        const saveGroup = await group.save();
+        return (0, response_1.successResponse)(200, 'create group', saveGroup);
+    }
+    async removeUserFromGroup(userId, groupId, body) {
+        const group = await this.groupsModel.findById(groupId);
+        if (!group)
+            return (0, response_1.errorResponse)(404, 'group not found');
+        const findIndex = (group.users).findIndex((user) => user.toString() === (body.userId).toString());
+        if (findIndex === -1)
+            return (0, response_1.errorResponse)(400, 'user is not in group');
+        (group.users).splice(findIndex, 1);
         const saveGroup = await group.save();
         return (0, response_1.successResponse)(200, 'create group', saveGroup);
     }
     async createSession(userId, body) {
-        const previousSession = await this.contactsModel.findOne({ $or: [{ user: userId, contact: body.contact },
-                { user: userId, contact: body.contact }] });
+        const previousSession = await this.contactsModel.findOne({
+            $or: [{ user: userId, contact: body.contact },
+                { user: userId, contact: body.contact }]
+        });
         if (previousSession)
             return (0, response_1.successResponse)(200, 'session', previousSession);
         const session = new this.contactsModel({ user: userId, contact: body.contact });
@@ -155,6 +179,7 @@ let ChatService = exports.ChatService = class ChatService {
     }
     async getUserGroups(userId) {
         const groupList = await this.groupsModel.find({ users: { $in: [new mongoose_2.default.Types.ObjectId(userId)] } })
+            .populate("createdBy", '_id firstName lastName email avatar connection_status last_seen', user_schema_1.User.name)
             .populate("users", '_id firstName lastName email avatar connection_status last_seen', user_schema_1.User.name)
             .sort({ last_update: -1 })
             .lean();
