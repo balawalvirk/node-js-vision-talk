@@ -61,3 +61,9 @@ export class CreateGroupDto {
 
 }
 
+export class AddRemoveUserGroupDto {
+
+    @IsString()
+    @IsNotEmpty()
+    userId;
+}

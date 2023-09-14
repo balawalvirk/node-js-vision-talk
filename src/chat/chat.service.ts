@@ -11,7 +11,13 @@ import {OrderByEnum} from "src/enums/posts.enum";
 import {ContactDocument} from "./models/contacts.model";
 import {GroupDocument} from "./models/group.model";
 import {ChatDocument} from "./models/chat.model";
-import {CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto} from "src/chat/dto/chat.dto";
+import {
+    AddRemoveUserGroupDto,
+    CreateChatDto,
+    CreateGroupDto,
+    CreateGroupMessageDto,
+    CreateSessionDto
+} from "src/chat/dto/chat.dto";
 import {ChatMessageTypeEnum} from "src/enums/chat.enum";
 import {SocketService} from "src/socket/socket.service";
 import Cache from 'cache-manager';
@@ -120,7 +126,7 @@ export class ChatService {
 
 
         for (let i = 0; i < usersInGroup.length; i++) {
-            const user=usersInGroup[i].toString()
+            const user = usersInGroup[i].toString()
             const statusData = await this.cacheManager.get(`user-socket-${user}`);
             if (statusData) {
                 const parsedData = JSON.parse(statusData);
@@ -136,18 +142,65 @@ export class ChatService {
 
     async createGroup(userId: string, body: CreateGroupDto, avatar: string) {
         (body.users).push(userId.toString());
-        const group = new this.groupsModel({users: body.users, name: body.name, avatar});
+        const group = new this.groupsModel({users: body.users, name: body.name, avatar,createdBy:userId});
         const saveGroup = await group.save();
 
         return successResponse(200, 'create group', saveGroup);
     }
 
+
+    async addNewUserInGroup(userId: string, groupId: string, body: AddRemoveUserGroupDto) {
+
+        const group = await this.groupsModel.findById(groupId);
+
+        if (!group)
+            return errorResponse(404, 'group not found');
+
+        const findIndex = (group.users).findIndex((user) => user.toString() === (body.userId).toString());
+
+        if (findIndex !== -1)
+            return errorResponse(400, 'already added in group');
+
+        (group.users).push(body.userId);
+
+
+        const saveGroup = await group.save();
+
+        return successResponse(200, 'create group', saveGroup);
+    }
+
+
+
+    async removeUserFromGroup(userId: string, groupId: string, body: AddRemoveUserGroupDto) {
+
+        const group = await this.groupsModel.findById(groupId);
+
+        if (!group)
+            return errorResponse(404, 'group not found');
+
+        const findIndex = (group.users).findIndex((user) => user.toString() === (body.userId).toString());
+
+        if (findIndex === -1)
+            return errorResponse(400, 'user is not in group');
+
+        (group.users).splice(findIndex,1);
+
+
+        const saveGroup = await group.save();
+
+        return successResponse(200, 'create group', saveGroup);
+    }
+
+
     async createSession(userId: string, body: CreateSessionDto) {
 
-        const previousSession=await this.contactsModel.findOne({$or:[{user: userId, contact: body.contact},
-                {user: userId, contact: body.contact}]})
 
-        if(previousSession) return successResponse(200, 'session', previousSession);
+        const previousSession = await this.contactsModel.findOne({
+            $or: [{user: userId, contact: body.contact},
+                {user: userId, contact: body.contact}]
+        })
+
+        if (previousSession) return successResponse(200, 'session', previousSession);
 
         const session = new this.contactsModel({user: userId, contact: body.contact});
         const saveSession = await session.save();
@@ -193,6 +246,7 @@ export class ChatService {
 
     async getUserGroups(userId: string) {
         const groupList = await this.groupsModel.find({users: {$in: [new mongoose.Types.ObjectId(userId)]}})
+            .populate("createdBy", '_id firstName lastName email avatar connection_status last_seen', User.name)
             .populate("users", '_id firstName lastName email avatar connection_status last_seen', User.name)
             .sort({last_update: -1})
             .lean();

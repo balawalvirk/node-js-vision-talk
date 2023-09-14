@@ -18,6 +18,10 @@ export class Group {
     users;
 
 
+    @Prop({type: mongoose.Schema.Types.ObjectId, ref: User.name})
+    createdBy;
+
+
     @Prop({ type: String,default:"" })
     name;
 

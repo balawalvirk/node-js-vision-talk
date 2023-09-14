@@ -3,7 +3,7 @@ import {
     Controller,
     Get, Param,
     ParseFilePipe,
-    Post,
+    Post, Put,
     Request,
     UploadedFile,
     UseGuards,
@@ -17,7 +17,13 @@ import {JwtAuthGuard} from "src/auth/jwt-auth.guard";
 import {file} from "@babel/types";
 import {successResponse} from "src/utils/response";
 import {ChatService} from "src/chat/chat.service";
-import {CreateChatDto, CreateGroupDto, CreateGroupMessageDto, CreateSessionDto} from "src/chat/dto/chat.dto";
+import {
+    AddRemoveUserGroupDto,
+    CreateChatDto,
+    CreateGroupDto,
+    CreateGroupMessageDto,
+    CreateSessionDto
+} from "src/chat/dto/chat.dto";
 
 @UseGuards(JwtAuthGuard)
 @Controller('chat')
@@ -89,5 +95,20 @@ export class ChatController {
         const response = await this.chatService.getGroupMessage(sessionId);
         return response;
     }
+
+
+    @Put('/group/:groupId/add-member')
+    async addGroupInMember(@Body() body: AddRemoveUserGroupDto,@Param('groupId') groupId: string,@Request() req) {
+        const response = await this.chatService.addNewUserInGroup(req.user._id,groupId,body);
+        return response;
+    }
+
+
+    @Put('/group/:groupId/remove-member')
+    async removeGroupMember(@Body() body: AddRemoveUserGroupDto,@Param('groupId') groupId: string,@Request() req) {
+        const response = await this.chatService.removeUserFromGroup(req.user._id,groupId,body);
+        return response;
+    }
+
 
 }
