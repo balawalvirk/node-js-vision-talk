@@ -1,0 +1,172 @@
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NewsletterController = void 0;
+const common_1 = require("@nestjs/common");
+const FileUploadToS3_1 = require("../utils/FileUploadToS3");
+const platform_express_1 = require("@nestjs/platform-express");
+const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const newsletter_service_1 = require("./newsletter.service");
+const newsletter_dto_1 = require("./dtos/newsletter.dto");
+let NewsletterController = exports.NewsletterController = class NewsletterController {
+    constructor(newsletterService) {
+        this.newsletterService = newsletterService;
+    }
+    async create(file, body, req) {
+        const response = await this.newsletterService.create(body, file.location, req.user._id);
+        return response;
+    }
+    async getNewsletterDetails(id, type, req) {
+        const response = await this.newsletterService.getNewsLetterDetails(req.user._id, id);
+        return response;
+    }
+    async getAllNewsletters(req) {
+        const response = await this.newsletterService.getAllNewsPapers(req.user._id);
+        return response;
+    }
+    async getAllUserNewsletters(id, type, req) {
+        const response = await this.newsletterService.getUserNewsLetters(req.user._id);
+        return response;
+    }
+    async postComment(body, newsletterId, req) {
+        const response = await this.newsletterService.postComment(body, req.user._id, newsletterId);
+        return response;
+    }
+    async postCommentReply(body, newsletterId, commentId, req) {
+        const response = await this.newsletterService.replyPostComment(body, req.user._id, newsletterId, commentId);
+        return response;
+    }
+    async createNewsletterLike(newsletterId, req) {
+        const response = await this.newsletterService.postNewsletterLike(req.user._id, newsletterId);
+        return response;
+    }
+    async createNewsletterDislike(newsletterId, req) {
+        const response = await this.newsletterService.createNewsletterDislike(req.user._id, newsletterId);
+        return response;
+    }
+    async createNewsletterSubscription(body, newsletterId, req) {
+        const response = await this.newsletterService.createNewsLetterSubscriptionRequests(req.user._id, newsletterId, body);
+        return response;
+    }
+    async updateNewsletterSubscriptionStatus(body, newsletterSubscriptionId, req) {
+        const response = await this.newsletterService.updateNewsLetterSubscriptionRequest(newsletterSubscriptionId, body);
+        return response;
+    }
+    async getAllSubscriptions(req) {
+        const response = await this.newsletterService.getAllSubscriptionRequests(req.user._id);
+        return response;
+    }
+};
+__decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
+    (0, common_1.Post)('/'),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: true,
+    }))),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, newsletter_dto_1.CreateNewsLetterDto, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "create", null);
+__decorate([
+    (0, common_1.Get)('/:id/details'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('type')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getNewsletterDetails", null);
+__decorate([
+    (0, common_1.Get)('/all'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getAllNewsletters", null);
+__decorate([
+    (0, common_1.Get)('/user'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('type')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getAllUserNewsletters", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/comment'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.CreateNewsletterComment, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "postComment", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/comment/:commentId/reply'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(2, (0, common_1.Param)('commentId')),
+    __param(3, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.CreateNewsletterComment, String, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "postCommentReply", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/like'),
+    __param(0, (0, common_1.Param)('newsletterId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "createNewsletterLike", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/dislike'),
+    __param(0, (0, common_1.Param)('newsletterId')),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "createNewsletterDislike", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/subscription'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.CreateNewsletterSubscriptionDto, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "createNewsletterSubscription", null);
+__decorate([
+    (0, common_1.Put)('/subscription/:newsletterSubscriptionId'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('newsletterSubscriptionId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.UpdateNewsletterSubscriptionStatusRequest, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "updateNewsletterSubscriptionStatus", null);
+__decorate([
+    (0, common_1.Get)('/subscription'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getAllSubscriptions", null);
+exports.NewsletterController = NewsletterController = __decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Controller)('newsletter'),
+    __metadata("design:paramtypes", [newsletter_service_1.NewsletterService])
+], NewsletterController);
+//# sourceMappingURL=newsletter.controller.js.map
