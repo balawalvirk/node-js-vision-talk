@@ -11,8 +11,8 @@ export class NewsLetterComment {
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User;
 
-    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'NewsLetters' })
-    newsletter;
+    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'articles' })
+    article;
 
     @Prop({ type: String,default:"" })
     message;

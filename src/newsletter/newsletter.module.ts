@@ -12,12 +12,14 @@ import {NewsLetterCommentSchema} from "src/newsletter/models/comments.model";
 import {NewsletterSubscriptionsSchema} from "src/newsletter/models/subscriptions.model";
 import {NewsletterController} from "src/newsletter/newsletter.controller";
 import {NewsletterService} from "src/newsletter/newsletter.service";
+import {ArticleSchema} from "src/newsletter/models/article.model";
 
 @Module({
     imports: [
         MongooseModule.forFeature([
             {name: "User", schema: UserSchema},
             {name: 'newsletters', schema: NewsLetterSchema},
+            {name: 'articles', schema: ArticleSchema},
             {name: "newsletter-likes", schema: NewsLetterLikeSchema},
             {name: "newsletter-comments", schema: NewsLetterCommentSchema},
             {name:"newsletter-subscriptions-requests",schema:NewsletterSubscriptionsSchema},

@@ -15,6 +15,7 @@ import {JwtAuthGuard} from "src/auth/jwt-auth.guard";
 import {file} from "@babel/types";
 import {NewsletterService} from "src/newsletter/newsletter.service";
 import {
+    CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
     CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest
@@ -32,14 +33,24 @@ export class NewsletterController {
     async create(@UploadedFile(new ParseFilePipe(
         {fileIsRequired: true,
         })) file: any,@Body() body: CreateNewsLetterDto,@Request() req) {
-        const response = await this.newsletterService.create(body,file.location,req.user._id);
+        const response = await this.newsletterService.createNewsLetter(body,file.location,req.user._id);
         return response;
     }
 
 
-    @Get('/:id/details')
-    async getNewsletterDetails(@Param('id') id: string,@Param('type') type: string,@Request() req) {
-        const response = await this.newsletterService.getNewsLetterDetails(req.user._id,id);
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
+    @Post('/:id/article')
+    async createArticle(@UploadedFile(new ParseFilePipe(
+        {fileIsRequired: true,
+        })) file: any,@Body() body: CreateArticleDto,@Request() req) {
+        const response = await this.newsletterService.createArticle(body,file.location,req.user._id,req.params.id);
+        return response;
+    }
+
+
+    @Get('/article/:id/details')
+    async getArticleDetails(@Param('id') id: string,@Param('type') type: string,@Request() req) {
+        const response = await this.newsletterService.getArticleDetails(req.user._id,id);
         return response;
     }
 
@@ -58,30 +69,30 @@ export class NewsletterController {
     }
 
 
-    @Post('/:newsletterId/comment')
-    async postComment(@Body() body: CreateNewsletterComment,@Param('newsletterId') newsletterId: string,@Request() req) {
-        const response = await this.newsletterService.postComment(body,req.user._id,newsletterId);
+    @Post('/article/:articleId/comment')
+    async postComment(@Body() body: CreateNewsletterComment,@Param('articleId') articleId: string,@Request() req) {
+        const response = await this.newsletterService.postComment(body,req.user._id,articleId);
         return response;
     }
 
-    @Post('/:newsletterId/comment/:commentId/reply')
-    async postCommentReply(@Body() body: CreateNewsletterComment,@Param('newsletterId') newsletterId: string
+    @Post('/article/:articleId/comment/:commentId/reply')
+    async postCommentReply(@Body() body: CreateNewsletterComment,@Param('articleId') articleId: string
                            ,@Param('commentId') commentId: string,@Request() req) {
-        const response = await this.newsletterService.replyPostComment(body,req.user._id,newsletterId,commentId);
+        const response = await this.newsletterService.replyPostComment(body,req.user._id,articleId,commentId);
         return response;
     }
 
 
-    @Post('/:newsletterId/like')
-    async createNewsletterLike(@Param('newsletterId') newsletterId: string,@Request() req) {
-        const response = await this.newsletterService.postNewsletterLike(req.user._id,newsletterId);
+    @Post('/article/:articleId/like')
+    async createNewsletterLike(@Param('articleId') articleId: string,@Request() req) {
+        const response = await this.newsletterService.postNewsletterLike(req.user._id,articleId);
         return response;
     }
 
 
-    @Post('/:newsletterId/dislike')
-    async createNewsletterDislike(@Param('newsletterId') newsletterId: string,@Request() req) {
-        const response = await this.newsletterService.createNewsletterDislike(req.user._id,newsletterId);
+    @Post('/article/:articleId/dislike')
+    async createNewsletterDislike(@Param('articleId') articleId: string,@Request() req) {
+        const response = await this.newsletterService.createNewsletterDislike(req.user._id,articleId);
         return response;
     }
 

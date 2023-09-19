@@ -2,11 +2,22 @@ import {IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator'
 import {OrderByEnum, PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
 import {NewsLetterSubscriptionRequestsType} from "src/enums/newsletter.enum";
 
+
+
 export class CreateNewsLetterDto {
 
     @IsString()
     @IsNotEmpty()
     title;
+
+}
+
+export class CreateArticleDto {
+
+    @IsString()
+    @IsNotEmpty()
+    title;
+
 
 
     @IsString()

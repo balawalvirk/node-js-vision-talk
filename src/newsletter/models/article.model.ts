@@ -4,12 +4,12 @@ import * as mongoose from "mongoose";
 import {User} from "src/users/user.schema";
 import {PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
 
-export type NewsLetterDocument = NewsLetter & Document;
+export type ArticleDocument = Article & Document;
 
 @Schema()
-export class NewsLetter {
-    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
-    user: User;
+export class Article {
+    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsletters' })
+    newsletter;
 
 
     @Prop({ type: String,default:"" })
@@ -27,10 +27,16 @@ export class NewsLetter {
     @Prop({ type: String,default:"" })
     image;
 
+    @Prop({ type: Number,default:0 })
+    comments_count;
+
+    @Prop({ type: Number,default:0 })
+    likes_count;
+
 
     @Prop({ type: Date,default:Date.now })
     date_created;
 
 }
 
-export const NewsLetterSchema = SchemaFactory.createForClass(NewsLetter);
+export const ArticleSchema = SchemaFactory.createForClass(Article);

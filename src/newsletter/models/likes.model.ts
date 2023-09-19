@@ -11,8 +11,8 @@ export class NewsLetterLike {
     @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' })
     user: User;
 
-    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'NewsLetters' })
-    newsletter;
+    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'articles' })
+    article
 }
 
 export const NewsLetterLikeSchema = SchemaFactory.createForClass(NewsLetterLike);
