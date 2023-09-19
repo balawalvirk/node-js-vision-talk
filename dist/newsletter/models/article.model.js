@@ -9,38 +9,45 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NewsLetterSchema = exports.NewsLetter = void 0;
+exports.ArticleSchema = exports.Article = void 0;
 const mongoose_1 = require("@nestjs/mongoose");
 const mongoose = require("mongoose");
-const user_schema_1 = require("../../users/user.schema");
-let NewsLetter = exports.NewsLetter = class NewsLetter {
+let Article = exports.Article = class Article {
 };
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'User' }),
-    __metadata("design:type", user_schema_1.User)
-], NewsLetter.prototype, "user", void 0);
+    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsletters' }),
+    __metadata("design:type", Object)
+], Article.prototype, "newsletter", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)
-], NewsLetter.prototype, "title", void 0);
+], Article.prototype, "title", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)
-], NewsLetter.prototype, "details", void 0);
+], Article.prototype, "details", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)
-], NewsLetter.prototype, "time", void 0);
+], Article.prototype, "time", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)
-], NewsLetter.prototype, "image", void 0);
+], Article.prototype, "image", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Number, default: 0 }),
+    __metadata("design:type", Object)
+], Article.prototype, "comments_count", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Number, default: 0 }),
+    __metadata("design:type", Object)
+], Article.prototype, "likes_count", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
     __metadata("design:type", Object)
-], NewsLetter.prototype, "date_created", void 0);
-exports.NewsLetter = NewsLetter = __decorate([
+], Article.prototype, "date_created", void 0);
+exports.Article = Article = __decorate([
     (0, mongoose_1.Schema)()
-], NewsLetter);
-exports.NewsLetterSchema = mongoose_1.SchemaFactory.createForClass(NewsLetter);
-//# sourceMappingURL=newsletter.model.js.map
+], Article);
+exports.ArticleSchema = mongoose_1.SchemaFactory.createForClass(Article);
+//# sourceMappingURL=article.model.js.map

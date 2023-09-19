@@ -16,6 +16,7 @@ const comments_model_1 = require("./models/comments.model");
 const subscriptions_model_1 = require("./models/subscriptions.model");
 const newsletter_controller_1 = require("./newsletter.controller");
 const newsletter_service_1 = require("./newsletter.service");
+const article_model_1 = require("./models/article.model");
 let NewsletterModule = exports.NewsletterModule = class NewsletterModule {
 };
 exports.NewsletterModule = NewsletterModule = __decorate([
@@ -24,6 +25,7 @@ exports.NewsletterModule = NewsletterModule = __decorate([
             mongoose_1.MongooseModule.forFeature([
                 { name: "User", schema: user_schema_1.UserSchema },
                 { name: 'newsletters', schema: newsletter_model_1.NewsLetterSchema },
+                { name: 'articles', schema: article_model_1.ArticleSchema },
                 { name: "newsletter-likes", schema: likes_model_1.NewsLetterLikeSchema },
                 { name: "newsletter-comments", schema: comments_model_1.NewsLetterCommentSchema },
                 { name: "newsletter-subscriptions-requests", schema: subscriptions_model_1.NewsletterSubscriptionsSchema },

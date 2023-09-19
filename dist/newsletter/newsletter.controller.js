@@ -24,11 +24,15 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         this.newsletterService = newsletterService;
     }
     async create(file, body, req) {
-        const response = await this.newsletterService.create(body, file.location, req.user._id);
+        const response = await this.newsletterService.createNewsLetter(body, file.location, req.user._id);
         return response;
     }
-    async getNewsletterDetails(id, type, req) {
-        const response = await this.newsletterService.getNewsLetterDetails(req.user._id, id);
+    async createArticle(file, body, req) {
+        const response = await this.newsletterService.createArticle(body, file.location, req.user._id, req.params.id);
+        return response;
+    }
+    async getArticleDetails(id, type, req) {
+        const response = await this.newsletterService.getArticleDetails(req.user._id, id);
         return response;
     }
     async getAllNewsletters(req) {
@@ -39,20 +43,20 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.getUserNewsLetters(req.user._id);
         return response;
     }
-    async postComment(body, newsletterId, req) {
-        const response = await this.newsletterService.postComment(body, req.user._id, newsletterId);
+    async postComment(body, articleId, req) {
+        const response = await this.newsletterService.postComment(body, req.user._id, articleId);
         return response;
     }
-    async postCommentReply(body, newsletterId, commentId, req) {
-        const response = await this.newsletterService.replyPostComment(body, req.user._id, newsletterId, commentId);
+    async postCommentReply(body, articleId, commentId, req) {
+        const response = await this.newsletterService.replyPostComment(body, req.user._id, articleId, commentId);
         return response;
     }
-    async createNewsletterLike(newsletterId, req) {
-        const response = await this.newsletterService.postNewsletterLike(req.user._id, newsletterId);
+    async createNewsletterLike(articleId, req) {
+        const response = await this.newsletterService.postNewsletterLike(req.user._id, articleId);
         return response;
     }
-    async createNewsletterDislike(newsletterId, req) {
-        const response = await this.newsletterService.createNewsletterDislike(req.user._id, newsletterId);
+    async createNewsletterDislike(articleId, req) {
+        const response = await this.newsletterService.createNewsletterDislike(req.user._id, articleId);
         return response;
     }
     async createNewsletterSubscription(body, newsletterId, req) {
@@ -80,14 +84,25 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "create", null);
 __decorate([
-    (0, common_1.Get)('/:id/details'),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
+    (0, common_1.Post)('/:id/article'),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: true,
+    }))),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, newsletter_dto_1.CreateArticleDto, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "createArticle", null);
+__decorate([
+    (0, common_1.Get)('/article/:id/details'),
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Param)('type')),
     __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, Object]),
     __metadata("design:returntype", Promise)
-], NewsletterController.prototype, "getNewsletterDetails", null);
+], NewsletterController.prototype, "getArticleDetails", null);
 __decorate([
     (0, common_1.Get)('/all'),
     __param(0, (0, common_1.Request)()),
@@ -105,18 +120,18 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "getAllUserNewsletters", null);
 __decorate([
-    (0, common_1.Post)('/:newsletterId/comment'),
+    (0, common_1.Post)('/article/:articleId/comment'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(1, (0, common_1.Param)('articleId')),
     __param(2, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [newsletter_dto_1.CreateNewsletterComment, String, Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "postComment", null);
 __decorate([
-    (0, common_1.Post)('/:newsletterId/comment/:commentId/reply'),
+    (0, common_1.Post)('/article/:articleId/comment/:commentId/reply'),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(1, (0, common_1.Param)('articleId')),
     __param(2, (0, common_1.Param)('commentId')),
     __param(3, (0, common_1.Request)()),
     __metadata("design:type", Function),
@@ -124,16 +139,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "postCommentReply", null);
 __decorate([
-    (0, common_1.Post)('/:newsletterId/like'),
-    __param(0, (0, common_1.Param)('newsletterId')),
+    (0, common_1.Post)('/article/:articleId/like'),
+    __param(0, (0, common_1.Param)('articleId')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "createNewsletterLike", null);
 __decorate([
-    (0, common_1.Post)('/:newsletterId/dislike'),
-    __param(0, (0, common_1.Param)('newsletterId')),
+    (0, common_1.Post)('/article/:articleId/dislike'),
+    __param(0, (0, common_1.Param)('articleId')),
     __param(1, (0, common_1.Request)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, Object]),

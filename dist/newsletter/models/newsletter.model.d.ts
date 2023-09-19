@@ -8,8 +8,6 @@ export declare class NewsLetter {
     details: any;
     time: any;
     image: any;
-    comments_count: any;
-    likes_count: any;
     date_created: any;
 }
 export declare const NewsLetterSchema: mongoose.Schema<NewsLetter, mongoose.Model<NewsLetter, any, any, any, Document<unknown, any, NewsLetter> & Omit<NewsLetter & {

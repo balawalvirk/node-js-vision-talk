@@ -20,9 +20,9 @@ __decorate([
     __metadata("design:type", user_schema_1.User)
 ], NewsLetterLike.prototype, "user", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'NewsLetters' }),
+    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'articles' }),
     __metadata("design:type", Object)
-], NewsLetterLike.prototype, "newsletter", void 0);
+], NewsLetterLike.prototype, "article", void 0);
 exports.NewsLetterLike = NewsLetterLike = __decorate([
     (0, mongoose_1.Schema)()
 ], NewsLetterLike);

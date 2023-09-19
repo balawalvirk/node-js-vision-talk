@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateNewsletterSubscriptionStatusRequest = exports.CreateNewsletterSubscriptionDto = exports.CreatePostFilterDto = exports.CreateNewsletterComment = exports.CreateNewsLetterDto = void 0;
+exports.UpdateNewsletterSubscriptionStatusRequest = exports.CreateNewsletterSubscriptionDto = exports.CreatePostFilterDto = exports.CreateNewsletterComment = exports.CreateArticleDto = exports.CreateNewsLetterDto = void 0;
 const class_validator_1 = require("class-validator");
 const posts_enum_1 = require("../../enums/posts.enum");
 const newsletter_enum_1 = require("../../enums/newsletter.enum");
@@ -21,16 +21,24 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Object)
 ], CreateNewsLetterDto.prototype, "title", void 0);
+class CreateArticleDto {
+}
+exports.CreateArticleDto = CreateArticleDto;
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Object)
-], CreateNewsLetterDto.prototype, "details", void 0);
+], CreateArticleDto.prototype, "title", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Object)
-], CreateNewsLetterDto.prototype, "time", void 0);
+], CreateArticleDto.prototype, "details", void 0);
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Object)
+], CreateArticleDto.prototype, "time", void 0);
 class CreateNewsletterComment {
 }
 exports.CreateNewsletterComment = CreateNewsletterComment;

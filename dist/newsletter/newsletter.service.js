@@ -20,23 +20,76 @@ const response_1 = require("../utils/response");
 const user_schema_1 = require("../users/user.schema");
 const newsletter_enum_1 = require("../enums/newsletter.enum");
 let NewsletterService = exports.NewsletterService = class NewsletterService {
-    constructor(newsletterModel, usersModel, newslettersLikeModel, newsletterCommentsModel, newsletterSubscriptionRequestsModel) {
+    constructor(newsletterModel, articleModel, usersModel, newslettersLikeModel, newsletterCommentsModel, newsletterSubscriptionRequestsModel) {
         this.newsletterModel = newsletterModel;
+        this.articleModel = articleModel;
         this.usersModel = usersModel;
         this.newslettersLikeModel = newslettersLikeModel;
         this.newsletterCommentsModel = newsletterCommentsModel;
         this.newsletterSubscriptionRequestsModel = newsletterSubscriptionRequestsModel;
     }
-    async create(body, fileName, user) {
+    async createNewsLetter(body, fileName, user) {
         const newsletter = new this.newsletterModel(Object.assign(Object.assign({}, body), { image: fileName, user }));
         const saveNewsletter = await newsletter.save();
         return (0, response_1.successResponse)(200, 'newsletter created', saveNewsletter);
+    }
+    async createArticle(body, fileName, user, newspaperId) {
+        const newsletter = await this.newsletterModel.findById(newspaperId);
+        if (!newsletter)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
+        const newsletterArticle = new this.articleModel(Object.assign(Object.assign({}, body), { image: fileName, user, newsletter: newspaperId }));
+        const saveNewsletterArticle = await newsletterArticle.save();
+        return (0, response_1.successResponse)(200, 'article created', saveNewsletterArticle);
     }
     async getAllNewsPapers(userId) {
         const newsletters = await this.newsletterModel.aggregate([
             {
                 $lookup: {
-                    from: "newsletter-likes",
+                    from: "articles",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] }
+                                    ]
+                                }
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "newsletter-likes",
+                                let: { article: '$_id' },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    { $eq: ['$article', '$$article'] },
+                                                    { $eq: ['$user', userId] }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'like_data'
+                            },
+                        },
+                        {
+                            $addFields: {
+                                own_like: { $cond: { if: { $gt: [{ $size: "$like_data" }, 0] }, then: true, else: false } }
+                            }
+                        },
+                        { $unset: ["like_data"] }
+                    ],
+                    as: 'articles'
+                },
+            },
+            { "$unwind": "$articles" },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
                     let: { newsletter: '$_id' },
                     pipeline: [
                         {
@@ -44,13 +97,47 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                                 $expr: {
                                     $and: [
                                         { $eq: ['$newsletter', '$$newsletter'] },
-                                        { $eq: ['$user', userId] }
+                                        { $eq: ['$receiver', userId] },
+                                        { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
                                     ]
                                 }
                             }
                         },
                     ],
-                    as: 'like_data'
+                    as: 'subscriptions'
+                },
+            },
+            {
+                $addFields: {
+                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } }
+                }
+            },
+            { $unset: ["subscriptions"] }
+        ]);
+        if (!newsletters)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
+        await this.newsletterModel.populate(newsletters, { path: "user", select: "firstName lastName email avatar" });
+        return (0, response_1.successResponse)(200, 'newsletters', newsletters);
+    }
+    async getUserNewsLetters(userId) {
+        const newsletters = await this.newsletterModel.aggregate([
+            { $match: { user: new mongoose_2.default.Types.ObjectId(userId) } },
+            {
+                $lookup: {
+                    from: "articles",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] }
+                                    ]
+                                }
+                            },
+                        }
+                    ],
+                    as: 'articles'
                 },
             },
             {
@@ -75,44 +162,34 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             },
             {
                 $addFields: {
-                    own_like: { $cond: { if: { $gt: [{ $size: "$like_data" }, 0] }, then: true, else: false } },
                     subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } }
                 }
             },
-            { $unset: ["like_data", "subscriptions"] }
-        ]);
-        if (!newsletters)
-            return (0, response_1.errorResponse)(404, 'newsletter not found');
-        await this.newsletterModel.populate(newsletters, { path: "user", select: "firstName lastName email avatar" });
-        return (0, response_1.successResponse)(200, 'newsletters', newsletters);
-    }
-    async getUserNewsLetters(userId) {
-        const newsletters = await this.newsletterModel.aggregate([
-            { $match: { user: new mongoose_2.default.Types.ObjectId(userId) } },
+            { $unset: ["subscriptions"] }
         ]);
         return (0, response_1.successResponse)(200, 'newsletter', newsletters);
     }
-    async getNewsLetterDetails(userId, newspaperId) {
-        const newsletters = await this.newsletterModel.aggregate([
+    async getArticleDetails(userId, newspaperId) {
+        const newsletters = await this.articleModel.aggregate([
             { $match: { _id: new mongoose_2.default.Types.ObjectId(newspaperId) } },
             {
                 $lookup: {
                     from: 'newsletter-comments',
                     localField: '_id',
-                    foreignField: 'newsletter',
+                    foreignField: 'article',
                     as: 'comments',
                 },
             },
             {
                 $lookup: {
                     from: "newsletter-likes",
-                    let: { newsletter: '$_id' },
+                    let: { article: '$_id' },
                     pipeline: [
                         {
                             $match: {
                                 $expr: {
                                     $and: [
-                                        { $eq: ['$newsletter', '$$newsletter'] },
+                                        { $eq: ['$article', '$$article'] },
                                         { $eq: ['$user', userId] }
                                     ]
                                 }
@@ -123,36 +200,11 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                 },
             },
             {
-                $lookup: {
-                    from: "newsletter-subscriptions-requests",
-                    let: {
-                        newsletter: '$_id',
-                        request_state: newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED,
-                        receiver: userId
-                    },
-                    pipeline: [
-                        {
-                            $match: {
-                                $expr: {
-                                    $and: [
-                                        { $eq: ['$newsletter', '$$newsletter'] },
-                                        { $eq: ['$request_state', '$$request_state'] },
-                                        { $eq: ['$receiver', '$$receiver'] },
-                                    ]
-                                }
-                            }
-                        },
-                    ],
-                    as: 'subscriptions'
-                },
-            },
-            {
                 $addFields: {
                     own_like: { $cond: { if: { $gt: [{ $size: "$like_data" }, 0] }, then: true, else: false } },
-                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } }
                 }
             },
-            { $unset: ["like_data", "subscriptions"] }
+            { $unset: ["like_data"] }
         ]);
         if (!newsletters)
             return (0, response_1.errorResponse)(404, 'newsletter not found');
@@ -169,49 +221,49 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         });
         return (0, response_1.successResponse)(200, 'newsletters', newsletters);
     }
-    async postComment(body, user, newsletterId) {
-        const newsletter = await this.newsletterModel.findById(newsletterId);
-        if (!newsletter)
-            return (0, response_1.errorResponse)(404, 'newsletter not found');
-        newsletter.comments_count = newsletter.comments_count + 1;
-        await newsletter.save();
-        const postComment = new this.newsletterCommentsModel(Object.assign(Object.assign({}, body), { user, newsletter: newsletterId }));
+    async postComment(body, user, articleId) {
+        const article = await this.articleModel.findById(articleId);
+        if (!article)
+            return (0, response_1.errorResponse)(404, 'article not found');
+        article.comments_count = article.comments_count + 1;
+        await article.save();
+        const postComment = new this.newsletterCommentsModel(Object.assign(Object.assign({}, body), { user, article: articleId }));
         const savePostComment = await postComment.save();
         return (0, response_1.successResponse)(200, 'comment created', savePostComment);
     }
-    async replyPostComment(body, user, newsletterId, commentId) {
-        const newsletter = await this.newsletterModel.findById(newsletterId);
-        if (!newsletter)
-            return (0, response_1.errorResponse)(404, 'newsletter not found');
+    async replyPostComment(body, user, articleId, commentId) {
+        const article = await this.articleModel.findById(articleId);
+        if (!article)
+            return (0, response_1.errorResponse)(404, 'article not found');
         const newsletterComment = await this.newsletterCommentsModel.findById(commentId);
         if (!newsletterComment)
-            return (0, response_1.errorResponse)(404, 'newsletter comment not found');
+            return (0, response_1.errorResponse)(404, 'article comment not found');
         newsletterComment.replies.push(Object.assign(Object.assign({}, body), { user }));
         const savePostComment = await newsletterComment.save();
         return (0, response_1.successResponse)(200, 'reply saved', savePostComment);
     }
-    async postNewsletterLike(user, newsletterId) {
-        const newsletter = await this.newsletterModel.findById(newsletterId);
-        if (!newsletter)
+    async postNewsletterLike(user, articleId) {
+        const article = await this.articleModel.findById(articleId);
+        if (!article)
             return (0, response_1.errorResponse)(404, 'newsletter not found');
-        const newsletterLike = await this.newslettersLikeModel.findOne({ user, newsletter: newsletterId });
+        const newsletterLike = await this.newslettersLikeModel.findOne({ user, article: articleId });
         if (newsletterLike)
             return (0, response_1.errorResponse)(400, 'already liked this post');
-        newsletter.likes_count = newsletter.likes_count + 1;
-        await newsletter.save();
-        const createNewsletterLike = new this.newslettersLikeModel({ user, newsletter: newsletterId });
+        article.likes_count = article.likes_count + 1;
+        await article.save();
+        const createNewsletterLike = new this.newslettersLikeModel({ user, article: articleId });
         const saveNewspaperLike = await createNewsletterLike.save();
         return (0, response_1.successResponse)(200, 'newsletter like created', saveNewspaperLike);
     }
-    async createNewsletterDislike(user, newsletterId) {
-        const newsletter = await this.newsletterModel.findById(newsletterId);
-        if (!newsletter)
-            return (0, response_1.errorResponse)(404, 'newsletter not found');
-        const newsletterLike = await this.newslettersLikeModel.findOneAndRemove({ user, newsletter: newsletterId });
+    async createNewsletterDislike(user, articleId) {
+        const article = await this.articleModel.findById(articleId);
+        if (!article)
+            return (0, response_1.errorResponse)(404, 'article not found');
+        const newsletterLike = await this.newslettersLikeModel.findOneAndRemove({ user, article: articleId });
         if (!newsletterLike)
-            return (0, response_1.errorResponse)(404, 'newsletter like not found');
-        newsletter.likes_count = newsletter.likes_count - 1;
-        await newsletter.save();
+            return (0, response_1.errorResponse)(404, 'article like not found');
+        article.likes_count = article.likes_count - 1;
+        await article.save();
         return (0, response_1.successResponse)(200, 'newsletter like removed', newsletterLike);
     }
     async createNewsLetterSubscriptionRequests(senderId, newsletterId, body) {
@@ -247,11 +299,13 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
 exports.NewsletterService = NewsletterService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, mongoose_1.InjectModel)('newsletters')),
-    __param(1, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
-    __param(2, (0, mongoose_1.InjectModel)("newsletter-likes")),
-    __param(3, (0, mongoose_1.InjectModel)("newsletter-comments")),
-    __param(4, (0, mongoose_1.InjectModel)("newsletter-subscriptions-requests")),
+    __param(1, (0, mongoose_1.InjectModel)('articles')),
+    __param(2, (0, mongoose_1.InjectModel)(user_schema_1.User.name)),
+    __param(3, (0, mongoose_1.InjectModel)("newsletter-likes")),
+    __param(4, (0, mongoose_1.InjectModel)("newsletter-comments")),
+    __param(5, (0, mongoose_1.InjectModel)("newsletter-subscriptions-requests")),
     __metadata("design:paramtypes", [mongoose_2.Model,
+        mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,
         mongoose_2.Model,

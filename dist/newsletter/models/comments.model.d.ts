@@ -4,7 +4,7 @@ import { User } from "src/users/user.schema";
 export type NewsLetterCommentDocument = NewsLetterComment & Document;
 export declare class NewsLetterComment {
     user: User;
-    newsletter: any;
+    article: any;
     message: any;
     date_created: any;
     replies: any;

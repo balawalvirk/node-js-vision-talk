@@ -20,9 +20,9 @@ __decorate([
     __metadata("design:type", user_schema_1.User)
 ], NewsLetterComment.prototype, "user", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'NewsLetters' }),
+    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'articles' }),
     __metadata("design:type", Object)
-], NewsLetterComment.prototype, "newsletter", void 0);
+], NewsLetterComment.prototype, "article", void 0);
 __decorate([
     (0, mongoose_1.Prop)({ type: String, default: "" }),
     __metadata("design:type", Object)

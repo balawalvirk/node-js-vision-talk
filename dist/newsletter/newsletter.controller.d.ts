@@ -1,5 +1,5 @@
 import { NewsletterService } from "src/newsletter/newsletter.service";
-import { CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 export declare class NewsletterController {
     private newsletterService;
     constructor(newsletterService: NewsletterService);
@@ -9,7 +9,13 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
-    getNewsletterDetails(id: string, type: string, req: any): Promise<{
+    createArticle(file: any, body: CreateArticleDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    getArticleDetails(id: string, type: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
@@ -27,25 +33,25 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
-    postComment(body: CreateNewsletterComment, newsletterId: string, req: any): Promise<{
+    postComment(body: CreateNewsletterComment, articleId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    postCommentReply(body: CreateNewsletterComment, newsletterId: string, commentId: string, req: any): Promise<{
+    postCommentReply(body: CreateNewsletterComment, articleId: string, commentId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    createNewsletterLike(newsletterId: string, req: any): Promise<{
+    createNewsletterLike(articleId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    createNewsletterDislike(newsletterId: string, req: any): Promise<{
+    createNewsletterDislike(articleId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

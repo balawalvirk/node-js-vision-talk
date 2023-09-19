@@ -3,16 +3,24 @@ import { UserDocument } from "src/users/user.schema";
 import { NewsLetterDocument } from "src/newsletter/models/newsletter.model";
 import { NewsLetterLikeDocument } from "src/newsletter/models/likes.model";
 import { NewsLetterCommentDocument } from "src/newsletter/models/comments.model";
-import { CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 import { NewsletterSubscriptionsDocument } from "src/newsletter/models/subscriptions.model";
+import { ArticleDocument } from "src/newsletter/models/article.model";
 export declare class NewsletterService {
     private readonly newsletterModel;
+    private readonly articleModel;
     private readonly usersModel;
     private readonly newslettersLikeModel;
     private readonly newsletterCommentsModel;
     private readonly newsletterSubscriptionRequestsModel;
-    constructor(newsletterModel: Model<NewsLetterDocument>, usersModel: Model<UserDocument>, newslettersLikeModel: Model<NewsLetterLikeDocument>, newsletterCommentsModel: Model<NewsLetterCommentDocument>, newsletterSubscriptionRequestsModel: Model<NewsletterSubscriptionsDocument>);
-    create(body: CreateNewsLetterDto, fileName: string, user: string): Promise<{
+    constructor(newsletterModel: Model<NewsLetterDocument>, articleModel: Model<ArticleDocument>, usersModel: Model<UserDocument>, newslettersLikeModel: Model<NewsLetterLikeDocument>, newsletterCommentsModel: Model<NewsLetterCommentDocument>, newsletterSubscriptionRequestsModel: Model<NewsletterSubscriptionsDocument>);
+    createNewsLetter(body: CreateNewsLetterDto, fileName: string, user: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    createArticle(body: CreateArticleDto, fileName: string, user: string, newspaperId: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
@@ -30,31 +38,31 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
-    getNewsLetterDetails(userId: any, newspaperId: string): Promise<{
+    getArticleDetails(userId: any, newspaperId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    postComment(body: CreateNewsletterComment, user: string, newsletterId: string): Promise<{
+    postComment(body: CreateNewsletterComment, user: string, articleId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    replyPostComment(body: CreateNewsletterComment, user: string, newsletterId: string, commentId: string): Promise<{
+    replyPostComment(body: CreateNewsletterComment, user: string, articleId: string, commentId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    postNewsletterLike(user: string, newsletterId: string): Promise<{
+    postNewsletterLike(user: string, articleId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
         data: any;
     }>;
-    createNewsletterDislike(user: string, newsletterId: string): Promise<{
+    createNewsletterDislike(user: string, articleId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
