@@ -48,6 +48,14 @@ export class NewsletterController {
     }
 
 
+    @Get('/:id/details')
+    async getNewsLetterById(@Param('id') id: string,@Param('type') type: string,@Request() req) {
+        const response = await this.newsletterService.getNewsLetterById(req.user._id,id);
+        return response;
+    }
+
+
+
     @Get('/article/:id/details')
     async getArticleDetails(@Param('id') id: string,@Param('type') type: string,@Request() req) {
         const response = await this.newsletterService.getArticleDetails(req.user._id,id);
