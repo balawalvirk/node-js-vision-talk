@@ -44,6 +44,12 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    getAllArticles(userId: String): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     getArticleDetails(userId: any, newspaperId: string): Promise<{
         success: boolean;
         statusCode: any;

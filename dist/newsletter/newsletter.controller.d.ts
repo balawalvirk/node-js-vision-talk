@@ -33,6 +33,12 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
+    getAllArticles(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     getAllUserNewsletters(id: string, type: string, req: any): Promise<{
         success: boolean;
         statusCode: any;

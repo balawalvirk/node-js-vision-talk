@@ -43,6 +43,10 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.getAllNewsPapers(req.user._id);
         return response;
     }
+    async getAllArticles(req) {
+        const response = await this.newsletterService.getAllArticles(req.user._id);
+        return response;
+    }
     async getAllUserNewsletters(id, type, req) {
         const response = await this.newsletterService.getUserNewsLetters(req.user._id);
         return response;
@@ -123,6 +127,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "getAllNewsletters", null);
+__decorate([
+    (0, common_1.Get)('/articles/all'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getAllArticles", null);
 __decorate([
     (0, common_1.Get)('/user'),
     __param(0, (0, common_1.Param)('id')),

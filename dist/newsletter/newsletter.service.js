@@ -287,6 +287,74 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         ]);
         return (0, response_1.successResponse)(200, 'newsletter', newsletters);
     }
+    async getAllArticles(userId) {
+        const newsletters = await this.articleModel.aggregate([
+            {
+                $lookup: {
+                    from: "newsletters",
+                    let: { newsletter: '$newsletter' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$_id', '$$newsletter'] },
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "$lookup": {
+                                "from": "users",
+                                "let": { "userId": "$user" },
+                                "pipeline": [
+                                    { "$match": { "$expr": { "$eq": ["$_id", "$$userId"] } } },
+                                    { "$project": { "firstName": 1, "lastName": 1, "email": 1, _id: 1, avatar: 1,
+                                            followers: 1, followings: 1 } },
+                                    {
+                                        $addFields: {
+                                            followers_count: { $size: "$followers" },
+                                            followings_count: { $size: "$followings" }
+                                        }
+                                    }
+                                ],
+                                "as": "user"
+                            }
+                        },
+                        { $unset: ["user.followers", "user.followings"] }
+                    ],
+                    as: 'newsletters'
+                },
+            },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: { newsletter: '$newsletter' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] },
+                                        { $eq: ['$receiver', userId] },
+                                        { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'subscriptions'
+                },
+            },
+            {
+                $addFields: {
+                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } },
+                }
+            },
+            { $unset: ["subscriptions"] }
+        ]);
+        return (0, response_1.successResponse)(200, 'newsletters', newsletters);
+    }
     async getArticleDetails(userId, newspaperId) {
         const newsletters = await this.articleModel.aggregate([
             { $match: { _id: new mongoose_2.default.Types.ObjectId(newspaperId) } },
