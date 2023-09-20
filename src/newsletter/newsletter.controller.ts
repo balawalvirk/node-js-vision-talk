@@ -70,6 +70,12 @@ export class NewsletterController {
     }
 
 
+    @Get('/articles/all')
+    async getAllArticles(@Request() req) {
+        const response = await this.newsletterService.getAllArticles(req.user._id);
+        return response;
+    }
+
     @Get('/user')
     async getAllUserNewsletters(@Param('id') id: string,@Param('type') type: string,@Request() req) {
         const response = await this.newsletterService.getUserNewsLetters(req.user._id);

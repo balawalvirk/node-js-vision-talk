@@ -46,7 +46,7 @@ export class NewsletterService {
         return successResponse(200, 'newsletter created', saveNewsletter);
     }
 
-    async createArticle(body: CreateArticleDto, fileName: string, user: string,newspaperId) {
+    async createArticle(body: CreateArticleDto, fileName: string, user: string, newspaperId) {
 
         const newsletter = await this.newsletterModel.findById(newspaperId);
 
@@ -54,7 +54,7 @@ export class NewsletterService {
             return errorResponse(404, 'newsletter not found');
 
 
-        const newsletterArticle = new this.articleModel({...body, image: fileName, user,newsletter:newspaperId});
+        const newsletterArticle = new this.articleModel({...body, image: fileName, user, newsletter: newspaperId});
         const saveNewsletterArticle = await newsletterArticle.save();
         return successResponse(200, 'article created', saveNewsletterArticle);
     }
@@ -107,7 +107,7 @@ export class NewsletterService {
                     as: 'articles'
                 },
             },
-            { "$unwind": "$articles" },
+            {"$unwind": "$articles"},
             {
                 $lookup: {
                     from: "newsletter-subscriptions-requests",
@@ -153,7 +153,7 @@ export class NewsletterService {
                     subscriptions_count: {$size: "$all_subscriptions"}
                 }
             },
-            {$unset: ["subscriptions","all_subscriptions"]}
+            {$unset: ["subscriptions", "all_subscriptions"]}
         ])
 
 
@@ -167,9 +167,7 @@ export class NewsletterService {
     }
 
 
-
-
-    async getNewsLetterById(userId,newsLetterId) {
+    async getNewsLetterById(userId, newsLetterId) {
         const newsletters = await this.newsletterModel.aggregate([
             {$match: {_id: new mongoose.Types.ObjectId(newsLetterId)}},
             {
@@ -217,7 +215,7 @@ export class NewsletterService {
                     as: 'articles'
                 },
             },
-            { "$unwind": "$articles" },
+            {"$unwind": "$articles"},
             {
                 $lookup: {
                     from: "newsletter-subscriptions-requests",
@@ -263,7 +261,7 @@ export class NewsletterService {
                     subscriptions_count: {$size: "$all_subscriptions"}
                 }
             },
-            {$unset: ["subscriptions","all_subscriptions"]}
+            {$unset: ["subscriptions", "all_subscriptions"]}
         ])
 
 
@@ -275,8 +273,6 @@ export class NewsletterService {
 
         return successResponse(200, 'newsletters', newsletters);
     }
-
-
 
 
     async getUserNewsLetters(userId) {
@@ -329,6 +325,79 @@ export class NewsletterService {
 
 
         return successResponse(200, 'newsletter', newsletters);
+    }
+
+
+    async getAllArticles(userId: String) {
+        const newsletters = await this.articleModel.aggregate([
+            {
+                $lookup: {
+                    from: "newsletters",
+                    let: {newsletter: '$newsletter'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$_id', '$$newsletter']},
+                                    ]
+                                }
+                            }
+                        },
+                        {
+                            "$lookup": {
+                                "from": "users",
+                                "let": {"userId": "$user"},
+                                "pipeline": [
+                                    {"$match": {"$expr": {"$eq": ["$_id", "$$userId"]}}},
+                                    { "$project": { "firstName": 1, "lastName": 1,"email":1,_id:1,avatar:1}},
+                                    {
+                                        $addFields: {
+                                            followers_count: {$size: "$followers"},
+                                            followings_count: {$size: "$followings"}
+
+                                        }
+                                    }
+                                ],
+                                "as": "user"
+                            }
+                        }
+                    ],
+                    as: 'newsletters'
+                },
+            },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: {newsletter: '$newsletter'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$newsletter', '$$newsletter']},
+                                        {$eq: ['$receiver', userId]},
+                                        {$eq: ['$request_state', NewsLetterSubscriptionRequestsType.ACCEPTED]},
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'subscriptions'
+                },
+            },
+            {
+                $addFields: {
+                    subscribed: {$cond: {if: {$gt: [{$size: "$subscriptions"}, 0]}, then: true, else: false}},
+
+                }
+            },
+            {$unset: ["subscriptions"]}
+
+        ])
+
+
+        return successResponse(200, 'newsletters', newsletters);
     }
 
 
