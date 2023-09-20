@@ -15,6 +15,12 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
+    getNewsLetterById(id: string, type: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     getArticleDetails(id: string, type: string, req: any): Promise<{
         success: boolean;
         statusCode: any;

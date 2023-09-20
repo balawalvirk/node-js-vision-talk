@@ -32,6 +32,12 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    getNewsLetterById(userId: any, newsLetterId: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     getUserNewsLetters(userId: any): Promise<{
         success: boolean;
         statusCode: any;

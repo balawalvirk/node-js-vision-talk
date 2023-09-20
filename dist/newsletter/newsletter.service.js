@@ -108,11 +108,130 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                 },
             },
             {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] },
+                                        { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'all_subscriptions'
+                },
+            },
+            {
                 $addFields: {
-                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } }
+                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } },
+                    subscriptions_count: { $size: "$all_subscriptions" }
                 }
             },
-            { $unset: ["subscriptions"] }
+            { $unset: ["subscriptions", "all_subscriptions"] }
+        ]);
+        if (!newsletters)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
+        await this.newsletterModel.populate(newsletters, { path: "user", select: "firstName lastName email avatar" });
+        return (0, response_1.successResponse)(200, 'newsletters', newsletters);
+    }
+    async getNewsLetterById(userId, newsLetterId) {
+        const newsletters = await this.newsletterModel.aggregate([
+            { $match: { _id: new mongoose_2.default.Types.ObjectId(newsLetterId) } },
+            {
+                $lookup: {
+                    from: "articles",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] }
+                                    ]
+                                }
+                            },
+                        },
+                        {
+                            $lookup: {
+                                from: "newsletter-likes",
+                                let: { article: '$_id' },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: {
+                                                $and: [
+                                                    { $eq: ['$article', '$$article'] },
+                                                    { $eq: ['$user', userId] }
+                                                ]
+                                            }
+                                        }
+                                    }
+                                ],
+                                as: 'like_data'
+                            },
+                        },
+                        {
+                            $addFields: {
+                                own_like: { $cond: { if: { $gt: [{ $size: "$like_data" }, 0] }, then: true, else: false } }
+                            }
+                        },
+                        { $unset: ["like_data"] }
+                    ],
+                    as: 'articles'
+                },
+            },
+            { "$unwind": "$articles" },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] },
+                                        { $eq: ['$receiver', userId] },
+                                        { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'subscriptions'
+                },
+            },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: { newsletter: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$newsletter', '$$newsletter'] },
+                                        { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'all_subscriptions'
+                },
+            },
+            {
+                $addFields: {
+                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } },
+                    subscriptions_count: { $size: "$all_subscriptions" }
+                }
+            },
+            { $unset: ["subscriptions", "all_subscriptions"] }
         ]);
         if (!newsletters)
             return (0, response_1.errorResponse)(404, 'newsletter not found');
@@ -150,7 +269,6 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                                 $expr: {
                                     $and: [
                                         { $eq: ['$newsletter', '$$newsletter'] },
-                                        { $eq: ['$receiver', userId] },
                                         { $eq: ['$request_state', newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED] },
                                     ]
                                 }
@@ -162,7 +280,7 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             },
             {
                 $addFields: {
-                    subscribed: { $cond: { if: { $gt: [{ $size: "$subscriptions" }, 0] }, then: true, else: false } }
+                    subscription_count: { $size: "$subscriptions" }
                 }
             },
             { $unset: ["subscriptions"] }

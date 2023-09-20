@@ -31,6 +31,10 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.createArticle(body, file.location, req.user._id, req.params.id);
         return response;
     }
+    async getNewsLetterById(id, type, req) {
+        const response = await this.newsletterService.getNewsLetterById(req.user._id, id);
+        return response;
+    }
     async getArticleDetails(id, type, req) {
         const response = await this.newsletterService.getArticleDetails(req.user._id, id);
         return response;
@@ -94,6 +98,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, newsletter_dto_1.CreateArticleDto, Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "createArticle", null);
+__decorate([
+    (0, common_1.Get)('/:id/details'),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Param)('type')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "getNewsLetterById", null);
 __decorate([
     (0, common_1.Get)('/article/:id/details'),
     __param(0, (0, common_1.Param)('id')),
