@@ -350,7 +350,8 @@ export class NewsletterService {
                                 "let": {"userId": "$user"},
                                 "pipeline": [
                                     {"$match": {"$expr": {"$eq": ["$_id", "$$userId"]}}},
-                                    { "$project": { "firstName": 1, "lastName": 1,"email":1,_id:1,avatar:1}},
+                                    { "$project": { "firstName": 1, "lastName": 1,"email":1,_id:1,avatar:1,
+                                        followers:1,followings:1}},
                                     {
                                         $addFields: {
                                             followers_count: {$size: "$followers"},
@@ -361,7 +362,9 @@ export class NewsletterService {
                                 ],
                                 "as": "user"
                             }
-                        }
+                        },
+                        {$unset: ["user.followers","user.followings"]}
+
                     ],
                     as: 'newsletters'
                 },
