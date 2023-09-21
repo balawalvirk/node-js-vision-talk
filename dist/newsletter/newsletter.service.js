@@ -404,6 +404,11 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             model: "User",
             select: "firstName lastName email avatar"
         });
+        await this.newsletterModel.populate(newsletters, {
+            path: "newsletter",
+            model: "newsletters",
+            select: "_id title details image time"
+        });
         return (0, response_1.successResponse)(200, 'newsletters', newsletters);
     }
     async postComment(body, user, articleId) {
