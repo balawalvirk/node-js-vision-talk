@@ -33,6 +33,10 @@ __decorate([
     __metadata("design:type", Object)
 ], NewsletterSubscriptions.prototype, "request_state", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, default: true }),
+    __metadata("design:type", Object)
+], NewsletterSubscriptions.prototype, "is_invite", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
     __metadata("design:type", Object)
 ], NewsletterSubscriptions.prototype, "date_created", void 0);

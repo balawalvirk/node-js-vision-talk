@@ -111,7 +111,14 @@ export class NewsletterController {
     }
 
 
-    @Post('/:newsletterId/subscription')
+    @Post('/:newsletterId/subscribe')
+    async subscribeNewsletter(@Body() body: CreateNewsletterSubscriptionDto,
+                                       @Param('newsletterId') newsletterId: string,@Request() req) {
+        const response = await this.newsletterService.createNewsLetterSubscription(req.user._id,newsletterId,body);
+        return response;
+    }
+
+    @Post('/:newsletterId/subscription/invite')
     async createNewsletterSubscription(@Body() body: CreateNewsletterSubscriptionDto,
                                        @Param('newsletterId') newsletterId: string,@Request() req) {
         const response = await this.newsletterService.createNewsLetterSubscriptionRequests(req.user._id,newsletterId,body);
@@ -121,9 +128,9 @@ export class NewsletterController {
 
     @Put('/subscription/:newsletterSubscriptionId')
     async updateNewsletterSubscriptionStatus(@Body() body: UpdateNewsletterSubscriptionStatusRequest,
-                                       @Param('newsletterSubscriptionId') newsletterSubscriptionId: string,@Request() req) {
-        const response = await this.newsletterService.updateNewsLetterSubscriptionRequest(newsletterSubscriptionId,body);
-        return response;
+            @Param('newsletterSubscriptionId') newsletterSubscriptionId: string,@Request() req) {
+            const response = await this.newsletterService.updateNewsLetterSubscriptionRequest(newsletterSubscriptionId,body);
+            return response;
     }
 
 

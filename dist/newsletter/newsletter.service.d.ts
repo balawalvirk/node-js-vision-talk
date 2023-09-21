@@ -86,6 +86,12 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    createNewsLetterSubscription(senderId: string, newsletterId: string, body: CreateNewsletterSubscriptionDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     updateNewsLetterSubscriptionRequest(newsletterId: string, body: UpdateNewsletterSubscriptionStatusRequest): Promise<{
         success: boolean;
         statusCode: any;

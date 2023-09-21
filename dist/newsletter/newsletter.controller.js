@@ -67,6 +67,10 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.createNewsletterDislike(req.user._id, articleId);
         return response;
     }
+    async subscribeNewsletter(body, newsletterId, req) {
+        const response = await this.newsletterService.createNewsLetterSubscription(req.user._id, newsletterId, body);
+        return response;
+    }
     async createNewsletterSubscription(body, newsletterId, req) {
         const response = await this.newsletterService.createNewsLetterSubscriptionRequests(req.user._id, newsletterId, body);
         return response;
@@ -179,7 +183,16 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "createNewsletterDislike", null);
 __decorate([
-    (0, common_1.Post)('/:newsletterId/subscription'),
+    (0, common_1.Post)('/:newsletterId/subscribe'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Param)('newsletterId')),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.CreateNewsletterSubscriptionDto, String, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "subscribeNewsletter", null);
+__decorate([
+    (0, common_1.Post)('/:newsletterId/subscription/invite'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Param)('newsletterId')),
     __param(2, (0, common_1.Request)()),

@@ -24,6 +24,9 @@ export class NewsletterSubscriptions {
     @Prop({ type: String,enum: NewsLetterSubscriptionRequestsType, default: NewsLetterSubscriptionRequestsType.INITIATED })
     request_state;
 
+    @Prop({ type: Boolean,default:true })
+    is_invite;
+
 
     @Prop({ type: Date,default:Date.now })
     date_created;

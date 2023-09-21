@@ -469,6 +469,21 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             .create({ sender: senderId, receiver: body.user, newsletter: newsletterId });
         return (0, response_1.successResponse)(200, 'new request created', newsletterSubscriptionRequest);
     }
+    async createNewsLetterSubscription(senderId, newsletterId, body) {
+        const newsletterRequest = await this.newsletterSubscriptionRequestsModel
+            .findOneAndUpdate({
+            sender: new mongoose_2.default.Types.ObjectId(senderId),
+            newsletter: new mongoose_2.default.Types.ObjectId(newsletterId),
+            receiver: new mongoose_2.default.Types.ObjectId(body.user),
+        }, {
+            sender: new mongoose_2.default.Types.ObjectId(senderId),
+            newsletter: new mongoose_2.default.Types.ObjectId(newsletterId),
+            receiver: new mongoose_2.default.Types.ObjectId(body.user),
+            request_state: newsletter_enum_1.NewsLetterSubscriptionRequestsType.ACCEPTED,
+            is_invite: false
+        }, { upsert: true, new: true });
+        return (0, response_1.successResponse)(200, 'new request created', newsletterRequest);
+    }
     async updateNewsLetterSubscriptionRequest(newsletterId, body) {
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel.findById(newsletterId);
         if (!newsletterRequest)
@@ -477,11 +492,11 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         return (0, response_1.successResponse)(200, 'request status updated', newsletterRequest);
     }
     async getAllSubscriptionRequests(userId) {
-        const sent = await this.newsletterSubscriptionRequestsModel.find({ sender: userId })
+        const sent = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, is_invite: true })
             .populate("receiver", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({ "date_created": -1 });
-        const received = await this.newsletterSubscriptionRequestsModel.find({ receiver: userId })
+        const received = await this.newsletterSubscriptionRequestsModel.find({ receiver: userId, is_invite: true })
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({ "date_created": -1 });

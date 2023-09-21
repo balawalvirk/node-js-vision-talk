@@ -572,6 +572,27 @@ export class NewsletterService {
     }
 
 
+    async createNewsLetterSubscription(senderId: string, newsletterId: string, body: CreateNewsletterSubscriptionDto) {
+
+        const newsletterRequest = await this.newsletterSubscriptionRequestsModel
+            .findOneAndUpdate({
+                sender: new mongoose.Types.ObjectId(senderId),
+                newsletter: new mongoose.Types.ObjectId(newsletterId),
+                receiver: new mongoose.Types.ObjectId(body.user),
+            },{
+                sender: new mongoose.Types.ObjectId(senderId),
+                newsletter: new mongoose.Types.ObjectId(newsletterId),
+                receiver: new mongoose.Types.ObjectId(body.user),
+                request_state:NewsLetterSubscriptionRequestsType.ACCEPTED,
+                is_invite:false
+            },{upsert:true,new:true})
+
+
+
+        return successResponse(200, 'new request created', newsletterRequest);
+    }
+
+
     async updateNewsLetterSubscriptionRequest(newsletterId: string, body: UpdateNewsletterSubscriptionStatusRequest) {
 
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel.findById(newsletterId);
@@ -585,11 +606,11 @@ export class NewsletterService {
 
     async getAllSubscriptionRequests(userId: string) {
 
-        const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId})
+        const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId,is_invite:true})
             .populate("receiver", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});
-        const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId})
+        const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId,is_invite:true})
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});

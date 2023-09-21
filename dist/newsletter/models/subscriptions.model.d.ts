@@ -7,6 +7,7 @@ export declare class NewsletterSubscriptions {
     receiver: User;
     newsletter: any;
     request_state: any;
+    is_invite: any;
     date_created: any;
 }
 export declare const NewsletterSubscriptionsSchema: mongoose.Schema<NewsletterSubscriptions, mongoose.Model<NewsletterSubscriptions, any, any, any, Document<unknown, any, NewsletterSubscriptions> & Omit<NewsletterSubscriptions & {

@@ -69,6 +69,12 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
+    subscribeNewsletter(body: CreateNewsletterSubscriptionDto, newsletterId: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     createNewsletterSubscription(body: CreateNewsletterSubscriptionDto, newsletterId: string, req: any): Promise<{
         success: boolean;
         statusCode: any;
