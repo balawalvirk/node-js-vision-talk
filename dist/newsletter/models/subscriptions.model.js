@@ -25,7 +25,7 @@ __decorate([
     __metadata("design:type", user_schema_1.User)
 ], NewsletterSubscriptions.prototype, "receiver", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsLetters' }),
+    (0, mongoose_1.Prop)({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsletters' }),
     __metadata("design:type", Object)
 ], NewsletterSubscriptions.prototype, "newsletter", void 0);
 __decorate([

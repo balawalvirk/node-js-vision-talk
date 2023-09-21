@@ -185,7 +185,6 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                     as: 'articles'
                 },
             },
-            { "$unwind": "$articles" },
             {
                 $lookup: {
                     from: "newsletter-subscriptions-requests",
@@ -301,7 +300,7 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
                                         { $eq: ['$_id', '$$newsletter'] },
                                     ]
                                 }
-                            }
+                            },
                         },
                         {
                             "$lookup": {
@@ -475,9 +474,11 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
     async getAllSubscriptionRequests(userId) {
         const sent = await this.newsletterSubscriptionRequestsModel.find({ sender: userId })
             .populate("receiver", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
             .sort({ "date_created": -1 });
         const received = await this.newsletterSubscriptionRequestsModel.find({ receiver: userId })
             .populate("sender", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
             .sort({ "date_created": -1 });
         return (0, response_1.successResponse)(200, 'request status updated', { sent, received });
     }
