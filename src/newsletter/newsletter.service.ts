@@ -460,6 +460,11 @@ export class NewsletterService {
             select: "firstName lastName email avatar"
         });
 
+        await this.newsletterModel.populate(newsletters, {
+            path: "newsletter",
+            model: "newsletters",
+            select: "_id title details image time"
+        });
 
         return successResponse(200, 'newsletters', newsletters);
     }
