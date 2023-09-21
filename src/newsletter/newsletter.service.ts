@@ -410,6 +410,85 @@ export class NewsletterService {
             {$match: {_id: new mongoose.Types.ObjectId(newspaperId)}},
             {
                 $lookup: {
+                    from: "newsletters",
+                    let: {newsletter: '$newsletter'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$_id', '$$newsletter']},
+                                    ]
+                                }
+                            },
+
+                        },
+                        {
+                            "$lookup": {
+                                "from": "users",
+                                "let": {"userId": "$user"},
+                                "pipeline": [
+                                    {"$match": {"$expr": {"$eq": ["$_id", "$$userId"]}}},
+                                    { "$project": { "firstName": 1, "lastName": 1,"email":1,_id:1,avatar:1,
+                                            followers:1,followings:1}},
+                                    {
+                                        $addFields: {
+                                            followers_count: {$size: "$followers"},
+                                            followings_count: {$size: "$followings"}
+
+                                        }
+                                    }
+                                ],
+                                "as": "user"
+                            }
+                        },
+                        {$unset: ["user.followers","user.followings"]}
+
+                    ],
+                    as: 'newsletters'
+                },
+            },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: {newsletter: '$newsletter'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$newsletter', '$$newsletter']},
+                                        {$eq: ['$receiver', userId]},
+                                        {$eq: ['$request_state', NewsLetterSubscriptionRequestsType.ACCEPTED]},
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'subscriptions'
+                },
+            },
+            {
+                $lookup: {
+                    from: "newsletter-subscriptions-requests",
+                    let: {newsletter: '$newsletter'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$newsletter', '$$newsletter']},
+                                        {$eq: ['$receiver', userId]},
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'all_subscriptions'
+                },
+            },
+            {
+                $lookup: {
                     from: 'newsletter-comments',
                     localField: '_id',
                     foreignField: 'article',
@@ -439,9 +518,12 @@ export class NewsletterService {
             {
                 $addFields: {
                     own_like: {$cond: {if: {$gt: [{$size: "$like_data"}, 0]}, then: true, else: false}},
+                    subscribed: {$cond: {if: {$gt: [{$size: "$subscriptions"}, 0]}, then: true, else: false}},
+                    subscription_count: {$size: "$all_subscriptions"}
+
                 }
             },
-            {$unset: ["like_data"]}
+            {$unset: ["like_data","subscriptions","all_subscriptions"]}
         ])
 
 
@@ -460,11 +542,6 @@ export class NewsletterService {
             select: "firstName lastName email avatar"
         });
 
-        await this.newsletterModel.populate(newsletters, {
-            path: "newsletter",
-            model: "newsletters",
-            select: "_id title details image time"
-        });
 
         return successResponse(200, 'newsletters', newsletters);
     }
@@ -608,11 +685,13 @@ export class NewsletterService {
 
         const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId,is_invite:true})
             .populate("receiver", "firstName lastName email avatar")
+            .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});
         const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId,is_invite:true})
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
+            .populate("sender", "firstName lastName email avatar")
             .sort({"date_created": -1});
 
 
