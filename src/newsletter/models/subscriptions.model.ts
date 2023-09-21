@@ -17,7 +17,7 @@ export class NewsletterSubscriptions {
     receiver: User;
 
 
-    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsLetters' })
+    @Prop({ required: true, type: mongoose.Schema.Types.ObjectId, ref: 'newsletters' })
     newsletter;
 
 

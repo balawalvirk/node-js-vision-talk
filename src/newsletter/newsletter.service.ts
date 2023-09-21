@@ -215,7 +215,6 @@ export class NewsletterService {
                     as: 'articles'
                 },
             },
-            {"$unwind": "$articles"},
             {
                 $lookup: {
                     from: "newsletter-subscriptions-requests",
@@ -268,7 +267,8 @@ export class NewsletterService {
         if (!newsletters)
             return errorResponse(404, 'newsletter not found');
 
-        await this.newsletterModel.populate(newsletters, {path: "user", select: "firstName lastName email avatar"});
+        await this.newsletterModel.populate(newsletters,
+            {path: "user", select: "firstName lastName email avatar"});
 
 
         return successResponse(200, 'newsletters', newsletters);
@@ -342,7 +342,8 @@ export class NewsletterService {
                                         {$eq: ['$_id', '$$newsletter']},
                                     ]
                                 }
-                            }
+                            },
+
                         },
                         {
                             "$lookup": {
@@ -581,9 +582,11 @@ export class NewsletterService {
 
         const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId})
             .populate("receiver", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});
         const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId})
             .populate("sender", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});
 
 
