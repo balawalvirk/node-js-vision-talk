@@ -630,6 +630,10 @@ export class NewsletterService {
 
 
     async createNewsLetterSubscriptionRequests(senderId: string, newsletterId: string, body: CreateNewsletterSubscriptionDto) {
+        const newsletter=await this.newsletterModel.findById(newsletterId);
+        if(!newsletter)
+            return errorResponse(404, 'newsletter not found');
+
 
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel
             .findOne({
@@ -650,6 +654,10 @@ export class NewsletterService {
 
 
     async createNewsLetterSubscription(senderId: string, newsletterId: string, body: CreateNewsletterSubscriptionDto) {
+        const newsletter=await this.newsletterModel.findById(newsletterId);
+        if(!newsletter)
+            return errorResponse(404, 'newsletter not found');
+
 
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel
             .findOneAndUpdate({

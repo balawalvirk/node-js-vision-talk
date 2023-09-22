@@ -530,6 +530,9 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         return (0, response_1.successResponse)(200, 'newsletter like removed', newsletterLike);
     }
     async createNewsLetterSubscriptionRequests(senderId, newsletterId, body) {
+        const newsletter = await this.newsletterModel.findById(newsletterId);
+        if (!newsletter)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel
             .findOne({
             sender: new mongoose_2.default.Types.ObjectId(senderId),
@@ -543,6 +546,9 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         return (0, response_1.successResponse)(200, 'new request created', newsletterSubscriptionRequest);
     }
     async createNewsLetterSubscription(senderId, newsletterId, body) {
+        const newsletter = await this.newsletterModel.findById(newsletterId);
+        if (!newsletter)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
         const newsletterRequest = await this.newsletterSubscriptionRequestsModel
             .findOneAndUpdate({
             sender: new mongoose_2.default.Types.ObjectId(senderId),
