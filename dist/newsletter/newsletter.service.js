@@ -577,6 +577,14 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             .sort({ "date_created": -1 });
         return (0, response_1.successResponse)(200, 'request status updated', { sent, received });
     }
+    async getAllSubscribedNewsletters(userId) {
+        const newsletters = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, is_invite: false })
+            .populate("receiver", "firstName lastName email avatar")
+            .populate("sender", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
+            .sort({ "date_created": -1 });
+        return (0, response_1.successResponse)(200, 'request status updated', newsletters);
+    }
 };
 exports.NewsletterService = NewsletterService = __decorate([
     (0, common_1.Injectable)(),

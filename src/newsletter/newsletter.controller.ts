@@ -139,4 +139,11 @@ export class NewsletterController {
         const response = await this.newsletterService.getAllSubscriptionRequests(req.user._id);
         return response;
     }
+
+
+    @Get('/subscribed')
+    async getAllSubscribedNewsletters(@Request() req) {
+        const response = await this.newsletterService.getAllSubscribedNewsletters(req.user._id);
+        return response;
+    }
 }

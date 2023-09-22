@@ -15,7 +15,7 @@ import {ChatService} from "../chat/chat.service";
 import {SocketService} from "../socket/socket.service";
 
 
-@WebSocketGateway(9001,{
+@WebSocketGateway(9010,{
     cors: {
         origin: '*',
     },

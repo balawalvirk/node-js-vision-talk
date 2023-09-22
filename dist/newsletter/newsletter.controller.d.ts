@@ -93,4 +93,10 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
+    getAllSubscribedNewsletters(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

@@ -78,7 +78,7 @@ __decorate([
     __metadata("design:returntype", Object)
 ], ChatGateway.prototype, "handleUpdateGroupCountZero", null);
 exports.ChatGateway = ChatGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(9001, {
+    (0, websockets_1.WebSocketGateway)(9010, {
         cors: {
             origin: '*',
         },

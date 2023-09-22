@@ -697,6 +697,20 @@ export class NewsletterService {
 
         return successResponse(200, 'request status updated', {sent, received});
     }
+
+
+    async getAllSubscribedNewsletters(userId: string) {
+
+        const newsletters = await this.newsletterSubscriptionRequestsModel.find({sender: userId,is_invite:false})
+            .populate("receiver", "firstName lastName email avatar")
+            .populate("sender", "firstName lastName email avatar")
+            .populate("newsletter", "_id title image details time")
+            .sort({"date_created": -1});
+
+
+        return successResponse(200, 'request status updated', newsletters);
+    }
+
 }
 
 

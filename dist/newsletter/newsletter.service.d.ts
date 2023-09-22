@@ -104,4 +104,10 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    getAllSubscribedNewsletters(userId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }
