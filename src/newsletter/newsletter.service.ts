@@ -677,18 +677,18 @@ export class NewsletterService {
             return errorResponse(404, 'request not found');
 
         newsletterRequest.request_state = body.request_state;
-
+        await newsletterRequest.save();
         return successResponse(200, 'request status updated', newsletterRequest);
     }
 
     async getAllSubscriptionRequests(userId: string) {
 
-        const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId,is_invite:true})
+        const sent = await this.newsletterSubscriptionRequestsModel.find({sender: userId,request_state:"initiated"})
             .populate("receiver", "firstName lastName email avatar")
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({"date_created": -1});
-        const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId,is_invite:true})
+        const received = await this.newsletterSubscriptionRequestsModel.find({receiver: userId,request_state:"initiated"})
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .populate("sender", "firstName lastName email avatar")
@@ -701,7 +701,7 @@ export class NewsletterService {
 
     async getAllSubscribedNewsletters(userId: string) {
 
-        const newsletters = await this.newsletterSubscriptionRequestsModel.find({sender: userId,is_invite:false})
+        const newsletters = await this.newsletterSubscriptionRequestsModel.find({sender: userId,request_state:"accepted"})
             .populate("receiver", "firstName lastName email avatar")
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")

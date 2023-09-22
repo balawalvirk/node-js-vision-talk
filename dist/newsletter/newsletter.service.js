@@ -562,15 +562,16 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         if (!newsletterRequest)
             return (0, response_1.errorResponse)(404, 'request not found');
         newsletterRequest.request_state = body.request_state;
+        await newsletterRequest.save();
         return (0, response_1.successResponse)(200, 'request status updated', newsletterRequest);
     }
     async getAllSubscriptionRequests(userId) {
-        const sent = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, is_invite: true })
+        const sent = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, request_state: "initiated" })
             .populate("receiver", "firstName lastName email avatar")
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .sort({ "date_created": -1 });
-        const received = await this.newsletterSubscriptionRequestsModel.find({ receiver: userId, is_invite: true })
+        const received = await this.newsletterSubscriptionRequestsModel.find({ receiver: userId, request_state: "initiated" })
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
             .populate("sender", "firstName lastName email avatar")
@@ -578,7 +579,7 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         return (0, response_1.successResponse)(200, 'request status updated', { sent, received });
     }
     async getAllSubscribedNewsletters(userId) {
-        const newsletters = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, is_invite: false })
+        const newsletters = await this.newsletterSubscriptionRequestsModel.find({ sender: userId, request_state: "accepted" })
             .populate("receiver", "firstName lastName email avatar")
             .populate("sender", "firstName lastName email avatar")
             .populate("newsletter", "_id title image details time")
