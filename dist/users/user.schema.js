@@ -62,47 +62,47 @@ const PointsOfClaritySchema = mongoose_1.SchemaFactory.createForClass(PointsOfCl
 let FocusList = class FocusList {
 };
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "desire", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation1", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation2", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation3", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation4", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation5", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation6", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation7", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation8", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation9", void 0);
 __decorate([
-    (0, mongoose_1.Prop)({ required: true }),
+    (0, mongoose_1.Prop)({ required: false }),
     __metadata("design:type", String)
 ], FocusList.prototype, "affirmation10", void 0);
 FocusList = __decorate([

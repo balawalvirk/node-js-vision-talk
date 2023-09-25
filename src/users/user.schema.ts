@@ -42,37 +42,37 @@ const PointsOfClaritySchema = SchemaFactory.createForClass(PointsOfClarity);
 
 @Schema({versionKey: false, _id: false})
 class FocusList {
-    @Prop({required: true})
+    @Prop({required: false})
     desire: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation1: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation2: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation3: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation4: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation5: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation6: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation7: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation8: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation9: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     affirmation10: string;
 }
 
