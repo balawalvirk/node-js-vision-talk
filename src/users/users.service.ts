@@ -20,7 +20,7 @@ export class UsersService extends BaseService<UserDocument> {
 
     async addFollower(userId: string, body: CreateFollowerFollowingDto) {
         const user = await this.userModal.findById(userId);
-        const follower=await this.userModal.findById(body.user);
+        const follower:any=await this.userModal.findById(body.user);
 
         if(!follower)
             return errorResponse(404, 'follower not exist.');
@@ -43,7 +43,7 @@ export class UsersService extends BaseService<UserDocument> {
 
     async addFollowing(userId: string, body: CreateFollowerFollowingDto) {
         const user = await this.userModal.findById(userId);
-        const following=await this.userModal.findById(body.user);
+        const following:any=await this.userModal.findById(body.user);
 
         if(!following)
             return errorResponse(404, 'following not exist.');
@@ -68,7 +68,7 @@ export class UsersService extends BaseService<UserDocument> {
 
     async deleteFollower(userId: string, followerId) {
         const user = await this.userModal.findById(userId);
-        const follower=await this.userModal.findById(followerId);
+        const follower:any=await this.userModal.findById(followerId);
 
         if(!follower)
             return errorResponse(404, 'Follower not exist.');
@@ -95,7 +95,7 @@ export class UsersService extends BaseService<UserDocument> {
 
     async deleteFollowing(userId: string, followingId) {
         const user = await this.userModal.findById(userId);
-        const following = await this.userModal.findById(followingId);
+        const following:any = await this.userModal.findById(followingId);
 
         if(!following)
             return errorResponse(404, 'Follower not exist.');
