@@ -20,12 +20,22 @@ export class UsersService extends BaseService<UserDocument> {
 
     async addFollower(userId: string, body: CreateFollowerFollowingDto) {
         const user = await this.userModal.findById(userId);
+        const follower=await this.userModal.findById(body.user);
+
+        if(!follower)
+            return errorResponse(404, 'follower not exist.');
+
         const findFollowerIndex=(user.followers || []).findIndex((follower)=>follower.toString()===body.user);
         if(findFollowerIndex!==-1){
             return errorResponse(400, 'Already added in followers list.');
         }
         (user.followers).push(body.user);
         const saveUser=await user.save();
+
+        (follower.followings).push(userId);
+        const saveFollower=await follower.save();
+
+
         return successResponse(200, 'post', saveUser);
 
     }
@@ -33,12 +43,24 @@ export class UsersService extends BaseService<UserDocument> {
 
     async addFollowing(userId: string, body: CreateFollowerFollowingDto) {
         const user = await this.userModal.findById(userId);
+        const following=await this.userModal.findById(body.user);
+
+        if(!following)
+            return errorResponse(404, 'following not exist.');
+
+
+
         const findFollowerIndex=(user.followings || []).findIndex((following)=>following.toString()===body.user);
         if(findFollowerIndex!==-1){
             return errorResponse(400, 'Already added in following list.');
         }
         (user.followings).push(body.user);
         const saveUser=await user.save();
+
+        (following.followers).push(userId);
+        const saveFollowing=await following.save();
+
+
         return successResponse(200, 'post', saveUser);
     }
 
@@ -46,12 +68,26 @@ export class UsersService extends BaseService<UserDocument> {
 
     async deleteFollower(userId: string, followerId) {
         const user = await this.userModal.findById(userId);
+        const follower=await this.userModal.findById(followerId);
+
+        if(!follower)
+            return errorResponse(404, 'Follower not exist.');
+
+
+
         const findFollowerIndex=(user.followers || []).findIndex((follower)=>follower.toString()===followerId);
         if(findFollowerIndex===-1){
             return errorResponse(404, 'Follower not exist.');
         }
         user.followers=(user.followers || []).filter((follower)=>(follower).toString()!==followerId.toString())
         const saveUser=await user.save();
+
+
+        follower.followings=(follower.followings || [])
+            .filter((following)=>(following).toString()!==userId.toString())
+
+
+        await follower.save();
         return successResponse(200, 'post', saveUser);
 
     }
@@ -59,12 +95,25 @@ export class UsersService extends BaseService<UserDocument> {
 
     async deleteFollowing(userId: string, followingId) {
         const user = await this.userModal.findById(userId);
+        const following = await this.userModal.findById(followingId);
+
+        if(!following)
+            return errorResponse(404, 'Follower not exist.');
+
+
         const findFollowingIndex=(user.followings || []).findIndex((following)=>following.toString()===followingId.toString());
         if(findFollowingIndex===-1){
             return errorResponse(404, 'Following not exist.');
         }
         user.followings=(user.followings || []).filter((following)=>(following).toString()!==followingId.toString())
         const saveUser=await user.save();
+
+
+        following.followers=(following.followers || [])
+            .filter((follower)=>(follower).toString()!==userId.toString())
+
+        await following.save();
+
         return successResponse(200, 'post', saveUser);
 
     }
