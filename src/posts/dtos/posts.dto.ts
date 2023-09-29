@@ -48,3 +48,14 @@ export class CreatePostFilterDto {
     order_by;
 
 }
+
+
+
+export class SavePostDto {
+
+    @IsString()
+    @IsNotEmpty()
+    post;
+
+
+}

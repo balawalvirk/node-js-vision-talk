@@ -41,6 +41,8 @@ export declare class User {
     focusList: FocusList;
     followers: any;
     followings: any;
+    savedArticles: any;
+    savedPosts: any;
     connection_status: any;
     last_seen: any;
 }

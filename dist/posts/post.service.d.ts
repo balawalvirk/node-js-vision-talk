@@ -1,6 +1,6 @@
 import { Model } from 'mongoose';
 import { PostDocument } from "src/posts/models/posts.model";
-import { CreatePostComment, CreatePostDto, CreatePostFilterDto } from "src/posts/dtos/posts.dto";
+import { CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto } from "src/posts/dtos/posts.dto";
 import { UserDocument } from "src/users/user.schema";
 import { PostLikeDocument } from "src/posts/models/likes.model";
 import { PostCommentDocument } from "src/posts/models/comments.model";
@@ -59,6 +59,12 @@ export declare class PostService {
         data: any;
     }>;
     postDisLike(user: string, postId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    savePostForUser(userId: string, payload: SavePostDto): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

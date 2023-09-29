@@ -129,6 +129,22 @@ export class User {
     followings;
 
 
+    @Prop([{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "articles"
+    }])
+    savedArticles;
+
+
+
+    @Prop([{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "posts"
+    }])
+    savedPosts;
+
+
+
     @Prop({ type: String,enum: STATUS, default: STATUS.OFFLINE })
     connection_status;
 

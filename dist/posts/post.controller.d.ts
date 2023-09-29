@@ -1,4 +1,4 @@
-import { CreatePostComment, CreatePostDto, CreatePostFilterDto } from "src/posts/dtos/posts.dto";
+import { CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto } from "src/posts/dtos/posts.dto";
 import { PostService } from "src/posts/post.service";
 export declare class PostController {
     private postService;
@@ -52,6 +52,12 @@ export declare class PostController {
         data: any;
     }>;
     filteredPost(body: CreatePostFilterDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    savePost(body: SavePostDto, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

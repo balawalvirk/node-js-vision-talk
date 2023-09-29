@@ -11,3 +11,6 @@ export declare class CreatePostFilterDto {
     type: any;
     order_by: any;
 }
+export declare class SavePostDto {
+    post: any;
+}

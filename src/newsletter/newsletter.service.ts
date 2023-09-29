@@ -14,7 +14,7 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto,
+    CreateNewsletterSubscriptionDto, SaveArticleDto,
     UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 import {NewsletterSubscriptionsDocument} from "src/newsletter/models/subscriptions.model";
@@ -717,6 +717,33 @@ export class NewsletterService {
 
 
         return successResponse(200, 'request status updated', newsletters);
+    }
+
+
+    async saveArticle(userId: string,payload:SaveArticleDto) {
+
+        const user:any=await this.usersModel.findById(userId);
+        const article=await this.articleModel.findById(payload.article)
+
+        if(!article)
+            return errorResponse(404, 'article not found');
+
+
+
+        const findIndex=(user.savedArticles || []).indexOf(payload.article);
+
+        let savedArticles=user.savedArticles || [];
+
+        if(findIndex===-1){
+            savedArticles.push(payload.article)
+        }
+
+        user.savedArticles=savedArticles
+
+        const saveUser=await user.save();
+
+
+        return successResponse(200, 'article save', saveUser);
     }
 
 }

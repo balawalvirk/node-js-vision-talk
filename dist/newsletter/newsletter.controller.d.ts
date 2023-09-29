@@ -1,5 +1,5 @@
 import { NewsletterService } from "src/newsletter/newsletter.service";
-import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 export declare class NewsletterController {
     private newsletterService;
     constructor(newsletterService: NewsletterService);
@@ -94,6 +94,12 @@ export declare class NewsletterController {
         data: any;
     }>;
     getAllSubscribedNewsletters(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    saveArticle(body: SaveArticleDto, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

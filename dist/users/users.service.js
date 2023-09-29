@@ -25,7 +25,10 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
         this.userModal = userModal;
     }
     async findOne(query) {
-        return await this.userModal.findOne(query).lean();
+        return await this.userModal.findOne(query)
+            .populate("savedArticles")
+            .populate("savedPosts")
+            .lean();
     }
     async addFollower(userId, body) {
         const user = await this.userModal.findById(userId);
@@ -92,7 +95,9 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
     async getUserById(userId) {
         const user = await this.userModal.findById(userId)
             .populate("followers", 'firstName lastName email avatar', user_schema_1.User.name)
-            .populate("followings", "firstName lastName email avatar", user_schema_1.User.name);
+            .populate("followings", "firstName lastName email avatar", user_schema_1.User.name)
+            .populate("savedArticles")
+            .populate("savedPosts");
         return (0, response_1.successResponse)(200, 'post', user);
     }
 };

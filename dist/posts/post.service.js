@@ -202,6 +202,20 @@ let PostService = exports.PostService = class PostService {
         await post.save();
         return (0, response_1.successResponse)(200, 'post like removed', postLike);
     }
+    async savePostForUser(userId, payload) {
+        const user = await this.usersModel.findById(userId);
+        const post = await this.postsModel.findById(payload.post);
+        if (!post)
+            return (0, response_1.errorResponse)(404, 'post not found');
+        const findIndex = (user.savedPosts || []).indexOf(payload.post);
+        let savedPosts = user.savedPosts || [];
+        if (findIndex === -1) {
+            savedPosts.push(payload.post);
+        }
+        user.savedPosts = savedPosts;
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'post save', saveUser);
+    }
 };
 exports.PostService = PostService = __decorate([
     (0, common_1.Injectable)(),

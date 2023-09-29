@@ -592,6 +592,20 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
             .sort({ "date_created": -1 });
         return (0, response_1.successResponse)(200, 'request status updated', newsletters);
     }
+    async saveArticle(userId, payload) {
+        const user = await this.usersModel.findById(userId);
+        const article = await this.articleModel.findById(payload.article);
+        if (!article)
+            return (0, response_1.errorResponse)(404, 'article not found');
+        const findIndex = (user.savedArticles || []).indexOf(payload.article);
+        let savedArticles = user.savedArticles || [];
+        if (findIndex === -1) {
+            savedArticles.push(payload.article);
+        }
+        user.savedArticles = savedArticles;
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'article save', saveUser);
+    }
 };
 exports.NewsletterService = NewsletterService = __decorate([
     (0, common_1.Injectable)(),

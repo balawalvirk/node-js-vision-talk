@@ -9,12 +9,14 @@ import {
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import {CreatePostComment, CreatePostDto, CreatePostFilterDto} from "src/posts/dtos/posts.dto";
+import {CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto} from "src/posts/dtos/posts.dto";
 import {PostService} from "src/posts/post.service";
 import FileUploadToS3 from "src/utils/FileUploadToS3";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {JwtAuthGuard} from "src/auth/jwt-auth.guard";
 import {file} from "@babel/types";
+import {SaveArticleDto} from "src/newsletter/dtos/newsletter.dto";
+import {successResponse} from "src/utils/response";
 
 @UseGuards(JwtAuthGuard)
 @Controller('post')
@@ -86,4 +88,14 @@ export class PostController {
         const response = await this.postService.getFilteredPosts(req.user._id,body);
         return response;
     }
+
+
+    @Post('/save')
+    async savePost(@Body() body: SavePostDto, @Request() req) {
+        const response = await this.postService.savePostForUser(req.user._id,body);
+        return response;
+    }
+
+
+
 }

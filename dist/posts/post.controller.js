@@ -59,6 +59,10 @@ let PostController = exports.PostController = class PostController {
         const response = await this.postService.getFilteredPosts(req.user._id, body);
         return response;
     }
+    async savePost(body, req) {
+        const response = await this.postService.savePostForUser(req.user._id, body);
+        return response;
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
@@ -141,6 +145,14 @@ __decorate([
     __metadata("design:paramtypes", [posts_dto_1.CreatePostFilterDto, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "filteredPost", null);
+__decorate([
+    (0, common_1.Post)('/save'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.SavePostDto, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "savePost", null);
 exports.PostController = PostController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('post'),

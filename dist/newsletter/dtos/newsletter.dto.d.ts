@@ -20,3 +20,6 @@ export declare class CreateNewsletterSubscriptionDto {
 export declare class UpdateNewsletterSubscriptionStatusRequest {
     request_state: any;
 }
+export declare class SaveArticleDto {
+    article: any;
+}

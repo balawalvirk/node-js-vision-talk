@@ -18,7 +18,7 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest
+    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 
 @UseGuards(JwtAuthGuard)
@@ -144,6 +144,14 @@ export class NewsletterController {
     @Get('/subscribed')
     async getAllSubscribedNewsletters(@Request() req) {
         const response = await this.newsletterService.getAllSubscribedNewsletters(req.user._id);
+        return response;
+    }
+
+
+
+    @Post('/article/save')
+    async saveArticle(@Body() body: SaveArticleDto, @Request() req) {
+        const response = await this.newsletterService.saveArticle(req.user._id,body);
         return response;
     }
 }

@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UpdateNewsletterSubscriptionStatusRequest = exports.CreateNewsletterSubscriptionDto = exports.CreatePostFilterDto = exports.CreateNewsletterComment = exports.CreateArticleDto = exports.CreateNewsLetterDto = void 0;
+exports.SaveArticleDto = exports.UpdateNewsletterSubscriptionStatusRequest = exports.CreateNewsletterSubscriptionDto = exports.CreatePostFilterDto = exports.CreateNewsletterComment = exports.CreateArticleDto = exports.CreateNewsLetterDto = void 0;
 const class_validator_1 = require("class-validator");
 const posts_enum_1 = require("../../enums/posts.enum");
 const newsletter_enum_1 = require("../../enums/newsletter.enum");
@@ -84,4 +84,12 @@ __decorate([
     (0, class_validator_1.IsEnum)(newsletter_enum_1.NewsLetterSubscriptionRequestsType),
     __metadata("design:type", Object)
 ], UpdateNewsletterSubscriptionStatusRequest.prototype, "request_state", void 0);
+class SaveArticleDto {
+}
+exports.SaveArticleDto = SaveArticleDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Object)
+], SaveArticleDto.prototype, "article", void 0);
 //# sourceMappingURL=newsletter.dto.js.map

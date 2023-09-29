@@ -87,6 +87,10 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.getAllSubscribedNewsletters(req.user._id);
         return response;
     }
+    async saveArticle(body, req) {
+        const response = await this.newsletterService.saveArticle(req.user._id, body);
+        return response;
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
@@ -227,6 +231,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "getAllSubscribedNewsletters", null);
+__decorate([
+    (0, common_1.Post)('/article/save'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [newsletter_dto_1.SaveArticleDto, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "saveArticle", null);
 exports.NewsletterController = NewsletterController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('newsletter'),

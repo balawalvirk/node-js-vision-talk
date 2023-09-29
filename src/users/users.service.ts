@@ -14,7 +14,10 @@ export class UsersService extends BaseService<UserDocument> {
     }
 
     async findOne(query: FilterQuery<UserDocument>) {
-        return await this.userModal.findOne(query).lean();
+        return await this.userModal.findOne(query)
+            .populate("savedArticles")
+            .populate("savedPosts")
+            .lean();
     }
 
 
@@ -121,7 +124,10 @@ export class UsersService extends BaseService<UserDocument> {
     async getUserById(userId: string) {
         const user = await this.userModal.findById(userId)
             .populate("followers",'firstName lastName email avatar',User.name)
-            .populate("followings","firstName lastName email avatar",User.name);
+            .populate("followings","firstName lastName email avatar",User.name)
+            .populate("savedArticles")
+            .populate("savedPosts")
+        ;
         return successResponse(200, 'post', user);
 
     }

@@ -3,7 +3,7 @@ import { UserDocument } from "src/users/user.schema";
 import { NewsLetterDocument } from "src/newsletter/models/newsletter.model";
 import { NewsLetterLikeDocument } from "src/newsletter/models/likes.model";
 import { NewsLetterCommentDocument } from "src/newsletter/models/comments.model";
-import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 import { NewsletterSubscriptionsDocument } from "src/newsletter/models/subscriptions.model";
 import { ArticleDocument } from "src/newsletter/models/article.model";
 export declare class NewsletterService {
@@ -105,6 +105,12 @@ export declare class NewsletterService {
         data: any;
     }>;
     getAllSubscribedNewsletters(userId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    saveArticle(userId: string, payload: SaveArticleDto): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

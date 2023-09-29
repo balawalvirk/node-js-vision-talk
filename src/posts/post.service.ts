@@ -2,12 +2,13 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import mongoose, {Model} from 'mongoose';
 import {PostDocument} from "src/posts/models/posts.model";
-import {CreatePostComment, CreatePostDto, CreatePostFilterDto} from "src/posts/dtos/posts.dto";
+import {CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto} from "src/posts/dtos/posts.dto";
 import {errorResponse, successResponse} from "src/utils/response";
 import {User, UserDocument} from "src/users/user.schema";
 import {PostLikeDocument} from "src/posts/models/likes.model";
 import {PostCommentDocument} from "src/posts/models/comments.model";
 import {OrderByEnum} from "src/enums/posts.enum";
+import {SaveArticleDto} from "src/newsletter/dtos/newsletter.dto";
 
 @Injectable()
 export class PostService {
@@ -286,6 +287,34 @@ export class PostService {
 
 
         return successResponse(200, 'post like removed', postLike);
+    }
+
+
+
+
+    async savePostForUser(userId: string,payload:SavePostDto) {
+
+        const user:any=await this.usersModel.findById(userId);
+        const post=await this.postsModel.findById(payload.post)
+
+        if(!post)
+            return errorResponse(404, 'post not found');
+
+
+
+        const findIndex=(user.savedPosts || []).indexOf(payload.post);
+
+        let savedPosts=user.savedPosts || [];
+
+        if(findIndex===-1){
+            savedPosts.push(payload.post)
+        }
+        user.savedPosts=savedPosts
+
+        const saveUser=await user.save();
+
+
+        return successResponse(200, 'post save', saveUser);
     }
 
 }

@@ -225,6 +225,8 @@ export declare class AuthService {
             affirmation10: string;
         }>;
         followings: any;
+        savedArticles: any;
+        savedPosts: any;
         connection_status: any;
         last_seen: any;
     }>;

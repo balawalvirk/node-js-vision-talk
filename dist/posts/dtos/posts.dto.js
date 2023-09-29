@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CreatePostFilterDto = exports.CreatePostComment = exports.CreatePostDto = void 0;
+exports.SavePostDto = exports.CreatePostFilterDto = exports.CreatePostComment = exports.CreatePostDto = void 0;
 const class_validator_1 = require("class-validator");
 const posts_enum_1 = require("../../enums/posts.enum");
 class CreatePostDto {
@@ -59,4 +59,12 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", Object)
 ], CreatePostFilterDto.prototype, "order_by", void 0);
+class SavePostDto {
+}
+exports.SavePostDto = SavePostDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    __metadata("design:type", Object)
+], SavePostDto.prototype, "post", void 0);
 //# sourceMappingURL=posts.dto.js.map

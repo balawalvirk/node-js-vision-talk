@@ -174,6 +174,20 @@ __decorate([
     __metadata("design:type", Object)
 ], User.prototype, "followings", void 0);
 __decorate([
+    (0, mongoose_1.Prop)([{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "articles"
+        }]),
+    __metadata("design:type", Object)
+], User.prototype, "savedArticles", void 0);
+__decorate([
+    (0, mongoose_1.Prop)([{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "posts"
+        }]),
+    __metadata("design:type", Object)
+], User.prototype, "savedPosts", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: String, enum: chat_enum_1.STATUS, default: chat_enum_1.STATUS.OFFLINE }),
     __metadata("design:type", Object)
 ], User.prototype, "connection_status", void 0);

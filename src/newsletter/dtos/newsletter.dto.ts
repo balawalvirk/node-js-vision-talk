@@ -84,3 +84,14 @@ export class UpdateNewsletterSubscriptionStatusRequest {
 
 
 }
+
+
+
+export class SaveArticleDto {
+
+    @IsString()
+    @IsNotEmpty()
+    article;
+
+
+}
