@@ -746,6 +746,33 @@ export class NewsletterService {
         return successResponse(200, 'article save', saveUser);
     }
 
+
+    async removeSaveArticle(userId: string,articleId:string) {
+
+        const user:any=await this.usersModel.findById(userId);
+        const article=await this.articleModel.findById(articleId)
+
+        if(!article)
+            return errorResponse(404, 'article not found');
+
+
+
+        const findIndex=(user.savedArticles || []).indexOf(articleId);
+
+        let savedArticles=user.savedArticles || [];
+
+        if(findIndex!==-1){
+            savedArticles.splice(findIndex,1)
+        }
+
+        user.savedArticles=savedArticles
+
+        const saveUser=await user.save();
+
+
+        return successResponse(200, 'saved article removed', saveUser);
+    }
+
 }
 
 

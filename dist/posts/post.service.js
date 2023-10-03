@@ -216,6 +216,20 @@ let PostService = exports.PostService = class PostService {
         const saveUser = await user.save();
         return (0, response_1.successResponse)(200, 'post save', saveUser);
     }
+    async removeSavedPostForUser(userId, postId) {
+        const user = await this.usersModel.findById(userId);
+        const post = await this.postsModel.findById(postId);
+        if (!post)
+            return (0, response_1.errorResponse)(404, 'post not found');
+        const findIndex = (user.savedPosts || []).indexOf(postId);
+        let savedPosts = user.savedPosts || [];
+        if (findIndex !== -1) {
+            savedPosts.splice(findIndex, 1);
+        }
+        user.savedPosts = savedPosts;
+        const saveUser = await user.save();
+        return (0, response_1.successResponse)(200, 'saved post removed', saveUser);
+    }
 };
 exports.PostService = PostService = __decorate([
     (0, common_1.Injectable)(),

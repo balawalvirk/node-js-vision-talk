@@ -70,4 +70,10 @@ export declare class PostService {
         message: any;
         data: any;
     }>;
+    removeSavedPostForUser(userId: string, postId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

@@ -1,6 +1,6 @@
 import {
     Body,
-    Controller,
+    Controller, Delete,
     Get, Param,
     ParseFilePipe,
     Post, Put,
@@ -152,6 +152,13 @@ export class NewsletterController {
     @Post('/article/save')
     async saveArticle(@Body() body: SaveArticleDto, @Request() req) {
         const response = await this.newsletterService.saveArticle(req.user._id,body);
+        return response;
+    }
+
+
+    @Delete('/article/:id/save')
+    async removeSavedArticle( @Param('id') id: string,@Request() req) {
+        const response = await this.newsletterService.removeSaveArticle(req.user._id,id);
         return response;
     }
 }

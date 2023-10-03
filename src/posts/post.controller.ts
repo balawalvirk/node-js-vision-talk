@@ -1,6 +1,6 @@
 import {
     Body,
-    Controller,
+    Controller, Delete,
     Get, Param,
     ParseFilePipe,
     Post,
@@ -93,6 +93,13 @@ export class PostController {
     @Post('/save')
     async savePost(@Body() body: SavePostDto, @Request() req) {
         const response = await this.postService.savePostForUser(req.user._id,body);
+        return response;
+    }
+
+
+    @Delete('/:id/save')
+    async removeSavedPost( @Param('id') id: string,@Request() req) {
+        const response = await this.postService.removeSavedPostForUser(req.user._id,id);
         return response;
     }
 

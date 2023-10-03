@@ -105,4 +105,10 @@ export declare class NewsletterController {
         message: any;
         data: any;
     }>;
+    removeSavedArticle(id: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

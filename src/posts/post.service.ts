@@ -317,4 +317,31 @@ export class PostService {
         return successResponse(200, 'post save', saveUser);
     }
 
+
+    async removeSavedPostForUser(userId: string,postId:string) {
+
+        const user:any=await this.usersModel.findById(userId);
+        const post=await this.postsModel.findById(postId)
+
+        if(!post)
+            return errorResponse(404, 'post not found');
+
+
+
+        const findIndex=(user.savedPosts || []).indexOf(postId);
+
+        let savedPosts=user.savedPosts || [];
+
+        if(findIndex!==-1){
+            savedPosts.splice(findIndex,1)
+        }
+        user.savedPosts=savedPosts
+
+        const saveUser=await user.save();
+
+
+        return successResponse(200, 'saved post removed', saveUser);
+    }
+
+
 }

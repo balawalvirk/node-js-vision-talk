@@ -63,4 +63,10 @@ export declare class PostController {
         message: any;
         data: any;
     }>;
+    removeSavedPost(id: string, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

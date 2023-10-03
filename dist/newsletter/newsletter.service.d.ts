@@ -116,4 +116,10 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    removeSaveArticle(userId: string, articleId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }
