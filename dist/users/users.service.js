@@ -93,12 +93,50 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
         return (0, response_1.successResponse)(200, 'post', saveUser);
     }
     async getUserById(userId) {
-        const user = await this.userModal.findById(userId)
-            .populate("followers", 'firstName lastName email avatar', user_schema_1.User.name)
-            .populate("followings", "firstName lastName email avatar", user_schema_1.User.name)
-            .populate("savedArticles")
-            .populate("savedPosts");
-        return (0, response_1.successResponse)(200, 'post', user);
+        const user = await this.userModal.aggregate([
+            { $match: { _id: new mongoose_2.default.Types.ObjectId(userId) } },
+            {
+                $lookup: {
+                    from: "goals",
+                    let: { user: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$user', new mongoose_2.default.Types.ObjectId(userId)] }
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'goals'
+                },
+            },
+            {
+                $lookup: {
+                    from: "posts",
+                    let: { user: '$_id' },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        { $eq: ['$user', new mongoose_2.default.Types.ObjectId(userId)] }
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'posts'
+                },
+            }
+        ]);
+        await this.userModal.populate(user, { path: "followers", select: "firstName lastName email avatar" });
+        await this.userModal.populate(user, { path: "followings", select: "firstName lastName email avatar" });
+        await this.userModal.populate(user, { path: "savedArticles", select: "firstName lastName email avatar" });
+        await this.userModal.populate(user, { path: "savedPosts", select: "firstName lastName email avatar" });
+        return (0, response_1.successResponse)(200, 'user', user);
     }
 };
 exports.UsersService = UsersService = __decorate([
