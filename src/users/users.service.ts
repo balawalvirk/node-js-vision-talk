@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
-import {FilterQuery, Model} from 'mongoose';
+import mongoose, {FilterQuery, Model} from 'mongoose';
 import {BaseService} from 'src/helpers/services/base.service';
 import {User, UserDocument} from './user.schema';
 import {CreatePostFilterDto} from "src/posts/dtos/posts.dto";
@@ -122,13 +122,53 @@ export class UsersService extends BaseService<UserDocument> {
     }
 
     async getUserById(userId: string) {
-        const user = await this.userModal.findById(userId)
-            .populate("followers",'firstName lastName email avatar',User.name)
-            .populate("followings","firstName lastName email avatar",User.name)
-            .populate("savedArticles")
-            .populate("savedPosts")
-        ;
-        return successResponse(200, 'post', user);
+        const user = await this.userModal.aggregate([
+            {$match: {_id:new mongoose.Types.ObjectId(userId)}},
+            {
+                $lookup: {
+                    from: "goals",
+                    let: {user: '$_id'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$user', new mongoose.Types.ObjectId(userId)]}
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'goals'
+                },
+            },
+            {
+                $lookup: {
+                    from: "posts",
+                    let: {user: '$_id'},
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: {
+                                    $and: [
+                                        {$eq: ['$user', new mongoose.Types.ObjectId(userId)]}
+                                    ]
+                                }
+                            }
+                        },
+                    ],
+                    as: 'posts'
+                },
+            }
+            ])
+
+        await this.userModal.populate(user, {path: "followers",select:"firstName lastName email avatar"});
+        await this.userModal.populate(user, {path: "followings",select:"firstName lastName email avatar"});
+        await this.userModal.populate(user, {path: "savedArticles",select:"firstName lastName email avatar"});
+        await this.userModal.populate(user, {path: "savedPosts",select:"firstName lastName email avatar"});
+
+
+        return successResponse(200, 'user', user);
 
     }
 
