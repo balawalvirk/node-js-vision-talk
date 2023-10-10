@@ -168,7 +168,13 @@ export class UsersService extends BaseService<UserDocument> {
         await this.userModal.populate(user, {path: "savedPosts",select:"firstName lastName email avatar"});
 
 
-        return successResponse(200, 'user', user);
+
+        if(!user || user.length===0){
+            return errorResponse(404, 'User not exist.');
+        }
+
+
+        return successResponse(200, 'user', user[0]);
 
     }
 
