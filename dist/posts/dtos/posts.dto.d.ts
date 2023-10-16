@@ -10,6 +10,8 @@ export declare class CreatePostFilterDto {
     category: any;
     type: any;
     order_by: any;
+    page: any;
+    perPage: any;
 }
 export declare class SavePostDto {
     post: any;

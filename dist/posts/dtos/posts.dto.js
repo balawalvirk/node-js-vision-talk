@@ -59,6 +59,16 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", Object)
 ], CreatePostFilterDto.prototype, "order_by", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Object)
+], CreatePostFilterDto.prototype, "page", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsNumber)(),
+    __metadata("design:type", Object)
+], CreatePostFilterDto.prototype, "perPage", void 0);
 class SavePostDto {
 }
 exports.SavePostDto = SavePostDto;

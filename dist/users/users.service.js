@@ -134,8 +134,8 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
         ]);
         await this.userModal.populate(user, { path: "followers", select: "firstName lastName email avatar" });
         await this.userModal.populate(user, { path: "followings", select: "firstName lastName email avatar" });
-        await this.userModal.populate(user, { path: "savedArticles", select: "firstName lastName email avatar" });
-        await this.userModal.populate(user, { path: "savedPosts", select: "firstName lastName email avatar" });
+        await this.userModal.populate(user, { path: "savedArticles" });
+        await this.userModal.populate(user, { path: "savedPosts" });
         if (!user || user.length === 0) {
             return (0, response_1.errorResponse)(404, 'User not exist.');
         }
