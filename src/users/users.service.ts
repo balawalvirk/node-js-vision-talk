@@ -164,8 +164,8 @@ export class UsersService extends BaseService<UserDocument> {
 
         await this.userModal.populate(user, {path: "followers",select:"firstName lastName email avatar"});
         await this.userModal.populate(user, {path: "followings",select:"firstName lastName email avatar"});
-        await this.userModal.populate(user, {path: "savedArticles",select:"firstName lastName email avatar"});
-        await this.userModal.populate(user, {path: "savedPosts",select:"firstName lastName email avatar"});
+        await this.userModal.populate(user, {path: "savedArticles"});
+        await this.userModal.populate(user, {path: "savedPosts"});
 
 
 

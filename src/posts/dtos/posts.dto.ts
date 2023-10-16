@@ -1,4 +1,4 @@
-import {IsEnum, IsNotEmpty, IsOptional, IsString, IsUUID} from 'class-validator';
+import {IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
 import {OrderByEnum, PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
 
 export class CreatePostDto {
@@ -46,6 +46,17 @@ export class CreatePostFilterDto {
     @IsEnum(OrderByEnum)
     @IsString()
     order_by;
+
+
+    @IsOptional()
+    @IsNumber()
+    page;
+
+
+
+    @IsOptional()
+    @IsNumber()
+    perPage;
 
 }
 
