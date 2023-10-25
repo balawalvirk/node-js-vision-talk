@@ -51,7 +51,7 @@ export class CreateGroupDto {
     @Transform(({value}) => JSON.parse(value))
     @IsArray()
     @IsString({each: true})
-    @ArrayMinSize(1)
+    @ArrayMinSize(0)
     users: string[];
 
     @IsString()
