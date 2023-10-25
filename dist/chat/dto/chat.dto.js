@@ -64,7 +64,7 @@ __decorate([
     (0, class_transformer_1.Transform)(({ value }) => JSON.parse(value)),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
-    (0, class_validator_1.ArrayMinSize)(1),
+    (0, class_validator_1.ArrayMinSize)(0),
     __metadata("design:type", Array)
 ], CreateGroupDto.prototype, "users", void 0);
 __decorate([
