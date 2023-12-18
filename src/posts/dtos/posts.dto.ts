@@ -1,5 +1,6 @@
-import {IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
+import {IsArray, IsBoolean, IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsUUID} from 'class-validator';
 import {OrderByEnum, PostCategoryEnum, PostTypeEnum} from "src/enums/posts.enum";
+import {Transform} from "class-transformer";
 
 export class CreatePostDto {
 
@@ -15,6 +16,15 @@ export class CreatePostDto {
     @IsEnum(PostTypeEnum)
     @IsString()
     type;
+
+
+    @IsOptional()
+    @Transform(({obj, key}) => {
+        return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+    })
+    @IsBoolean()
+    is_created_by_admin;
+
 
 }
 
@@ -53,6 +63,15 @@ export class CreatePostFilterDto {
     page;
 
 
+    @IsOptional()
+    @IsArray()
+    @IsString({each:true})
+    allCategories;
+
+
+    @IsOptional()
+    @IsBoolean()
+    is_created_by_admin;
 
     @IsOptional()
     @IsNumber()

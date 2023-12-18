@@ -9,6 +9,7 @@ import {PostLikeDocument} from "src/posts/models/likes.model";
 import {PostCommentDocument} from "src/posts/models/comments.model";
 import {OrderByEnum} from "src/enums/posts.enum";
 import {SaveArticleDto} from "src/newsletter/dtos/newsletter.dto";
+import {GoalsService} from "src/goals/goals.service";
 
 @Injectable()
 export class PostService {
@@ -20,9 +21,7 @@ export class PostService {
         @InjectModel("post-likes")
         private readonly postLikeModel: Model<PostLikeDocument>,
         @InjectModel("post-comments")
-        private readonly postCommentsModel: Model<PostCommentDocument>,
-
-
+        private readonly postCommentsModel: Model<PostCommentDocument>
 
     ) {
     }
@@ -157,6 +156,12 @@ export class PostService {
         if(body.category) query={...query,category:body.category}
 
         if(body.type) query={...query,type:body.type};
+
+        if(body.is_created_by_admin) query={...query,is_created_by_admin:body.is_created_by_admin};
+
+
+        if(body.allCategories) query={...query,category:{$in:body.allCategories}}
+
 
         const post = await this.postsModel.aggregate([
             {$match: {...query}},

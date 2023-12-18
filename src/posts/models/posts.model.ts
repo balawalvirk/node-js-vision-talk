@@ -32,6 +32,11 @@ export class Post {
     likes_count;
 
 
+    @Prop({ type: Boolean,default:false })
+    is_created_by_admin;
+
+
+
     @Prop({ type: Date,default:Date.now })
     date_created;
 
