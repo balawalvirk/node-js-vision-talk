@@ -15,6 +15,8 @@ const post_service_1 = require("./post.service");
 const user_schema_1 = require("../users/user.schema");
 const likes_model_1 = require("./models/likes.model");
 const comments_model_1 = require("./models/comments.model");
+const goals_service_1 = require("../goals/goals.service");
+const goal_schema_1 = require("../goals/goal.schema");
 let PostModule = exports.PostModule = class PostModule {
 };
 exports.PostModule = PostModule = __decorate([
@@ -23,10 +25,12 @@ exports.PostModule = PostModule = __decorate([
             mongoose_1.MongooseModule.forFeature([{ name: 'posts', schema: posts_model_1.PostSchema },
                 { name: "User", schema: user_schema_1.UserSchema },
                 { name: "post-likes", schema: likes_model_1.PostLikeSchema },
-                { name: "post-comments", schema: comments_model_1.PostCommentSchema }]),
+                { name: "post-comments", schema: comments_model_1.PostCommentSchema },
+                { name: goal_schema_1.Goal.name, schema: goal_schema_1.GoalSchema }
+            ]),
         ],
         controllers: [post_controller_1.PostController],
-        providers: [post_service_1.PostService],
+        providers: [post_service_1.PostService, goals_service_1.GoalsService],
     })
 ], PostModule);
 //# sourceMappingURL=post.module.js.map

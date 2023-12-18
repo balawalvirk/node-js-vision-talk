@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.SavePostDto = exports.CreatePostFilterDto = exports.CreatePostComment = exports.CreatePostDto = void 0;
 const class_validator_1 = require("class-validator");
 const posts_enum_1 = require("../../enums/posts.enum");
+const class_transformer_1 = require("class-transformer");
 class CreatePostDto {
 }
 exports.CreatePostDto = CreatePostDto;
@@ -30,6 +31,14 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", Object)
 ], CreatePostDto.prototype, "type", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ obj, key }) => {
+        return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+    }),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Object)
+], CreatePostDto.prototype, "is_created_by_admin", void 0);
 class CreatePostComment {
 }
 exports.CreatePostComment = CreatePostComment;
@@ -64,6 +73,17 @@ __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Object)
 ], CreatePostFilterDto.prototype, "page", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsString)({ each: true }),
+    __metadata("design:type", Object)
+], CreatePostFilterDto.prototype, "allCategories", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Object)
+], CreatePostFilterDto.prototype, "is_created_by_admin", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),

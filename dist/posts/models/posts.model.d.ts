@@ -10,6 +10,7 @@ export declare class Post {
     image: any;
     comments_count: any;
     likes_count: any;
+    is_created_by_admin: any;
     date_created: any;
 }
 export declare const PostSchema: mongoose.Schema<Post, mongoose.Model<Post, any, any, any, Document<unknown, any, Post> & Omit<Post & {

@@ -123,6 +123,10 @@ let PostService = exports.PostService = class PostService {
             query = Object.assign(Object.assign({}, query), { category: body.category });
         if (body.type)
             query = Object.assign(Object.assign({}, query), { type: body.type });
+        if (body.is_created_by_admin)
+            query = Object.assign(Object.assign({}, query), { is_created_by_admin: body.is_created_by_admin });
+        if (body.allCategories)
+            query = Object.assign(Object.assign({}, query), { category: { $in: body.allCategories } });
         const post = await this.postsModel.aggregate([
             { $match: Object.assign({}, query) },
             {

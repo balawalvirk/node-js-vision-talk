@@ -19,9 +19,11 @@ const post_service_1 = require("./post.service");
 const FileUploadToS3_1 = require("../utils/FileUploadToS3");
 const platform_express_1 = require("@nestjs/platform-express");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const goals_service_1 = require("../goals/goals.service");
 let PostController = exports.PostController = class PostController {
-    constructor(postService) {
+    constructor(postService, goalsService) {
         this.postService = postService;
+        this.goalsService = goalsService;
     }
     async create(file, body, req) {
         const response = await this.postService.create(body, file.location, req.user._id);
@@ -67,11 +69,26 @@ let PostController = exports.PostController = class PostController {
         const response = await this.postService.removeSavedPostForUser(req.user._id, id);
         return response;
     }
+    async getInspiredFromPeers(body, req) {
+        let categories = [];
+        const goals = (await this.goalsService.findAllRecords({ user: (req.user._id) })).map((g) => {
+            categories.push(g.type);
+            categories = categories.concat(g.accomplishingCharacteristics);
+            categories = categories.concat(g.accomplishingRelationships);
+            categories = categories.concat(g.accomplishingCharacteristicsNeeded);
+            categories = categories.concat(g.accomplishingRelationshipsNeeded);
+            categories = categories.concat(g.accomplishingRelationships);
+            return categories;
+        });
+        const response = await this.postService.getFilteredPosts(req.user._id, Object.assign({ allCategories: categories }, body));
+        return response;
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
     (0, common_1.Post)('/'),
-    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: true,
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        fileIsRequired: true,
     }))),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Request)()),
@@ -165,9 +182,18 @@ __decorate([
     __metadata("design:paramtypes", [String, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "removeSavedPost", null);
+__decorate([
+    (0, common_1.Post)('/inspiration-from-peers'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [posts_dto_1.CreatePostFilterDto, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "getInspiredFromPeers", null);
 exports.PostController = PostController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('post'),
-    __metadata("design:paramtypes", [post_service_1.PostService])
+    __metadata("design:paramtypes", [post_service_1.PostService,
+        goals_service_1.GoalsService])
 ], PostController);
 //# sourceMappingURL=post.controller.js.map

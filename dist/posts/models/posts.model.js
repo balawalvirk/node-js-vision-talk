@@ -45,6 +45,10 @@ __decorate([
     __metadata("design:type", Object)
 ], Post.prototype, "likes_count", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
+    __metadata("design:type", Object)
+], Post.prototype, "is_created_by_admin", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
     __metadata("design:type", Object)
 ], Post.prototype, "date_created", void 0);
