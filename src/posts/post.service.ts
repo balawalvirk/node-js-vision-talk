@@ -2,7 +2,13 @@ import {Injectable} from '@nestjs/common';
 import {InjectModel} from '@nestjs/mongoose';
 import mongoose, {Model} from 'mongoose';
 import {PostDocument} from "src/posts/models/posts.model";
-import {CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto} from "src/posts/dtos/posts.dto";
+import {
+    CreatePostComment,
+    CreatePostDto,
+    CreatePostFilterDto,
+    SavePostDto,
+    UpdatePostDto
+} from "src/posts/dtos/posts.dto";
 import {errorResponse, successResponse} from "src/utils/response";
 import {User, UserDocument} from "src/users/user.schema";
 import {PostLikeDocument} from "src/posts/models/likes.model";
@@ -32,7 +38,15 @@ export class PostService {
         return successResponse(200, 'post created', savePost);
     }
 
+    async updatePost(body: UpdatePostDto, fileName: string, id: string) {
+        let data:any={...body};
 
+        if(fileName)
+            data={...data,image:fileName}
+
+        const post = await this.postsModel.findByIdAndUpdate(id,data,{new:true});
+        return successResponse(200, 'post updated', post);
+    }
 
 
     async getAllPosts(userId,type:string) {
@@ -349,4 +363,9 @@ export class PostService {
     }
 
 
+    async deletePost(id: string) {
+        const user = await this.postsModel.findByIdAndRemove(id);
+        return successResponse(200, 'post deleted', user);
+
+    }
 }

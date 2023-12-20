@@ -83,7 +83,10 @@ export class UsersController {
         return await this.usersService.getUserById(id);
     }
 
-
+    @Delete('/')
+    async deleteProfile(@Request() req) {
+        return await this.usersService.deleteUser(req.user._id);
+    }
 
 
 }

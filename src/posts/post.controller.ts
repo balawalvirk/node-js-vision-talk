@@ -3,13 +3,19 @@ import {
     Controller, Delete,
     Get, Param,
     ParseFilePipe,
-    Post,
+    Post, Put,
     Request,
     UploadedFile,
     UseGuards,
     UseInterceptors
 } from '@nestjs/common';
-import {CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto} from "src/posts/dtos/posts.dto";
+import {
+    CreatePostComment,
+    CreatePostDto,
+    CreatePostFilterDto,
+    SavePostDto,
+    UpdatePostDto
+} from "src/posts/dtos/posts.dto";
 import {PostService} from "src/posts/post.service";
 import FileUploadToS3 from "src/utils/FileUploadToS3";
 import {FileInterceptor} from "@nestjs/platform-express";
@@ -40,6 +46,17 @@ export class PostController {
         return response;
     }
 
+
+
+    @UseInterceptors(FileInterceptor('file', {storage: FileUploadToS3.uploadFile()}))
+    @Put('/:id')
+    async update(@UploadedFile(new ParseFilePipe(
+        {
+            fileIsRequired: false,
+        })) file: any, @Body() body: UpdatePostDto, @Request() req) {
+        const response = await this.postService.updatePost(body, file && file.location, req.params.id);
+        return response;
+    }
 
     @Get('/:id/type/:type/details')
     async getPostDetails(@Param('id') id: string, @Param('type') type: string, @Request() req) {
@@ -124,5 +141,12 @@ export class PostController {
         })
         const response = await this.postService.getFilteredPosts(req.user._id, {allCategories:categories,...body});
         return response;
+    }
+
+
+
+    @Delete('/:id')
+    async deletePost(@Request() req) {
+        return await this.postService.deletePost(req.params.id);
     }
 }

@@ -89,3 +89,31 @@ export class SavePostDto {
 
 
 }
+
+
+
+
+export class UpdatePostDto {
+
+    @IsString()
+    @IsOptional()
+    caption;
+
+
+
+    @IsEnum(PostCategoryEnum)
+    @IsOptional()
+    category;
+
+    @IsEnum(PostTypeEnum)
+    @IsOptional()
+    type;
+
+    @IsOptional()
+    @Transform(({obj, key}) => {
+        return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+    })
+    @IsBoolean()
+    is_created_by_admin;
+
+}
