@@ -106,4 +106,15 @@ export class UpdateUserDto {
     @ValidateNested({each: true})
     @Type(() => FocusList)
     focusList?: FocusList;
+
+    @IsOptional()
+    @IsString()
+    state?: string;
+
+    @IsOptional()
+    @IsString()
+    city?: string;
+
+
+
 }

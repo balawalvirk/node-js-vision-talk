@@ -92,6 +92,14 @@ export class User {
     @Prop({trim: true})
     lastName: string;
 
+
+    @Prop({trim: true})
+    state: string;
+
+    @Prop({trim: true})
+    city: string;
+
+
     @Prop({default: AuthTypes.LOCAL})
     authType: string;
 

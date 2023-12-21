@@ -1,15 +1,126 @@
-import { IsEmail, IsString } from 'class-validator';
+import {IsDateString, IsEmail, IsOptional, IsString, ValidateNested} from 'class-validator';
+import {Transform, Type} from "class-transformer";
+
+
+class PointsOfClarity {
+    @IsString()
+    myValues: string;
+
+    @IsString()
+    myWhy: string;
+
+    @IsString()
+    myMission: string;
+}
+
+class LifeGoals {
+    @IsString()
+    physical: string;
+
+    @IsString()
+    emotional: string;
+
+    @IsString()
+    intellectual: string;
+
+    @IsString()
+    relational: string;
+
+    @IsString()
+    professsional: string;
+}
+
+class FocusList {
+    @IsString()
+    desire: string;
+
+    @IsString()
+    affirmation1: string;
+
+    @IsString()
+    affirmation2: string;
+
+    @IsString()
+    affirmation3: string;
+
+    @IsString()
+    affirmation4: string;
+
+    @IsString()
+    affirmation5: string;
+
+    @IsString()
+    affirmation6: string;
+
+    @IsString()
+    affirmation7: string;
+
+    @IsString()
+    affirmation8: string;
+
+    @IsString()
+    affirmation9: string;
+
+    @IsString()
+    affirmation10: string;
+}
 
 export class RegisterDto {
-  @IsEmail()
-  email: string;
+    @IsEmail()
+    email: string;
 
-  @IsString()
-  password: string;
+    @IsString()
+    password: string;
 
-  @IsString()
-  firstName: string;
+    @IsString()
+    firstName: string;
 
-  @IsString()
-  lastName: string;
+    @IsString()
+    lastName: string;
+
+
+    @IsOptional()
+    @IsDateString()
+    birthDate?: Date;
+
+    @IsOptional()
+    @IsString()
+    avatar?: string;
+
+    @IsOptional()
+    @IsString()
+    PhoneNumber?: string;
+
+    @IsOptional()
+    @IsString()
+    degree?: string;
+
+    @IsOptional()
+    @Transform(({value}) => JSON.parse(value))
+    @ValidateNested({each: true})
+    @Type(() => PointsOfClarity)
+    pointsOfClarity?: PointsOfClarity;
+
+    @IsOptional()
+    @Transform(({value}) => JSON.parse(value))
+    @ValidateNested({each: true})
+    @Type(() => LifeGoals)
+    lifeGoals?: LifeGoals;
+
+    @IsOptional()
+    @Transform(({value}) => JSON.parse(value))
+    @ValidateNested({each: true})
+    @Type(() => FocusList)
+    focusList?: FocusList;
+
+
+
+    @IsOptional()
+    @IsString()
+    state?: string;
+
+    @IsOptional()
+    @IsString()
+    city?: string;
+
 }
