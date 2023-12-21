@@ -188,6 +188,8 @@ export declare class LocalStrategy extends LocalStrategy_base {
         email: string;
         firstName: string;
         lastName: string;
+        state: string;
+        city: string;
         authType: string;
         birthDate: Date;
         avatar: string;

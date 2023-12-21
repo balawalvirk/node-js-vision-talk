@@ -33,5 +33,7 @@ export declare class UpdateUserDto {
     pointsOfClarity?: PointsOfClarity;
     lifeGoals?: LifeGoals;
     focusList?: FocusList;
+    state?: string;
+    city?: string;
 }
 export {};

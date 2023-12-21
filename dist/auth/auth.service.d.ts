@@ -194,6 +194,8 @@ export declare class AuthService {
         email: string;
         firstName: string;
         lastName: string;
+        state: string;
+        city: string;
         authType: string;
         birthDate: Date;
         avatar: string;

@@ -148,4 +148,14 @@ __decorate([
     (0, class_transformer_1.Type)(() => FocusList),
     __metadata("design:type", FocusList)
 ], UpdateUserDto.prototype, "focusList", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "state", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "city", void 0);
 //# sourceMappingURL=update-user.dto.js.map

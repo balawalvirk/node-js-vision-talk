@@ -128,6 +128,14 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "lastName", void 0);
 __decorate([
+    (0, mongoose_1.Prop)({ trim: true }),
+    __metadata("design:type", String)
+], User.prototype, "state", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ trim: true }),
+    __metadata("design:type", String)
+], User.prototype, "city", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ default: types_1.AuthTypes.LOCAL }),
     __metadata("design:type", String)
 ], User.prototype, "authType", void 0);
