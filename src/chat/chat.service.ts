@@ -197,7 +197,7 @@ export class ChatService {
 
         const previousSession = await this.contactsModel.findOne({
             $or: [{user: userId, contact: body.contact},
-                {user: userId, contact: body.contact}]
+                {user: body.contact, contact: userId}]
         })
 
         if (previousSession) return successResponse(200, 'session', previousSession);
@@ -289,5 +289,17 @@ export class ChatService {
 
         return successResponse(200, 'chat message', chatMessages);
     }
+
+
+    async deleteSession(userId: string) {
+
+
+        const previousSession = await this.contactsModel.findOneAndRemove({
+            $or: [{user: userId}, {contact: userId}]
+        })
+
+        return successResponse(200, 'session', previousSession);
+    }
+
 
 }

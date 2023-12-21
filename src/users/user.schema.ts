@@ -107,6 +107,11 @@ export class User {
     @Prop()
     phoneNumber: string;
 
+
+    @Prop()
+    tutorialVideo: string;
+
+
     @Prop({type: lifeGoalsSchema})
     lifeGoals: LifeGoals;
 

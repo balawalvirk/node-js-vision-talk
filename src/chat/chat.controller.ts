@@ -1,6 +1,6 @@
 import {
     Body,
-    Controller,
+    Controller, Delete,
     Get, Param,
     ParseFilePipe,
     Post, Put,
@@ -110,5 +110,9 @@ export class ChatController {
         return response;
     }
 
-
+    @Delete('/session')
+    async removeSession(@Request() req) {
+        const response = await this.chatService.deleteSession(req.user._id);
+        return response;
+    }
 }

@@ -49,6 +49,19 @@ export class UsersController {
         return await this.usersService.findOneRecordAndUpdate({_id: user._id}, {...updateUserDto,avatar:file?.location || user.avatar});
     }
 
+
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
+    @Put('update-tutorial-video')
+    async updateTutorialVideo(@CurrentUser() user: UserDocument,
+                              @UploadedFile(new ParseFilePipe({fileIsRequired: false})) file: any) {
+
+
+
+        return await this.usersService.findOneRecordAndUpdate({_id: user._id},
+            {tutorialVideo:file?.location || user.tutorialVideo});
+    }
+
+
     @Post('follower')
     async addFollower(@Body() body: CreateFollowerFollowingDto,@Request() req) {
         return await this.usersService.addFollower(req.user._id, body);
