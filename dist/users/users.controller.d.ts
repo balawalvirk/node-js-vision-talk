@@ -39,6 +39,13 @@ export declare class UsersController {
     }, never> & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>, never>>;
+    updateTutorialVideo(user: UserDocument, file: any): Promise<import("mongoose").Document<unknown, {}, import("mongoose").Document<unknown, {}, import("./user.schema").User> & Omit<import("./user.schema").User & {
+        _id: import("mongoose").Types.ObjectId;
+    }, never>> & Omit<import("mongoose").Document<unknown, {}, import("./user.schema").User> & Omit<import("./user.schema").User & {
+        _id: import("mongoose").Types.ObjectId;
+    }, never> & Required<{
+        _id: import("mongoose").Types.ObjectId;
+    }>, never>>;
     addFollower(body: CreateFollowerFollowingDto, req: any): Promise<{
         success: boolean;
         statusCode: any;
@@ -70,6 +77,12 @@ export declare class UsersController {
         data: any;
     }>;
     getUserById(id: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    deleteProfile(req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

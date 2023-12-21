@@ -36,6 +36,7 @@ export declare class User {
     avatar: string;
     degree: string;
     phoneNumber: string;
+    tutorialVideo: string;
     lifeGoals: LifeGoals;
     pointsOfClarity: PointsOfClarity;
     focusList: FocusList;

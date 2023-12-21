@@ -1,4 +1,4 @@
-import { CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto } from "src/posts/dtos/posts.dto";
+import { CreatePostComment, CreatePostDto, CreatePostFilterDto, SavePostDto, UpdatePostDto } from "src/posts/dtos/posts.dto";
 import { PostService } from "src/posts/post.service";
 import { GoalsService } from "src/goals/goals.service";
 export declare class PostController {
@@ -6,6 +6,12 @@ export declare class PostController {
     private readonly goalsService;
     constructor(postService: PostService, goalsService: GoalsService);
     create(file: any, body: CreatePostDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    update(file: any, body: UpdatePostDto, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
@@ -72,6 +78,12 @@ export declare class PostController {
         data: any;
     }>;
     getInspiredFromPeers(body: CreatePostFilterDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    deletePost(req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

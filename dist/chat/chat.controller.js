@@ -68,6 +68,10 @@ let ChatController = exports.ChatController = class ChatController {
         const response = await this.chatService.removeUserFromGroup(req.user._id, groupId, body);
         return response;
     }
+    async removeSession(req) {
+        const response = await this.chatService.deleteSession(req.user._id);
+        return response;
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
@@ -161,6 +165,13 @@ __decorate([
     __metadata("design:paramtypes", [chat_dto_1.AddRemoveUserGroupDto, String, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "removeGroupMember", null);
+__decorate([
+    (0, common_1.Delete)('/session'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "removeSession", null);
 exports.ChatController = ChatController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('chat'),

@@ -31,6 +31,13 @@ let PostService = exports.PostService = class PostService {
         const savePost = await post.save();
         return (0, response_1.successResponse)(200, 'post created', savePost);
     }
+    async updatePost(body, fileName, id) {
+        let data = Object.assign({}, body);
+        if (fileName)
+            data = Object.assign(Object.assign({}, data), { image: fileName });
+        const post = await this.postsModel.findByIdAndUpdate(id, data, { new: true });
+        return (0, response_1.successResponse)(200, 'post updated', post);
+    }
     async getAllPosts(userId, type) {
         const post = await this.postsModel.aggregate([
             { $match: { type } },
@@ -233,6 +240,10 @@ let PostService = exports.PostService = class PostService {
         user.savedPosts = savedPosts;
         const saveUser = await user.save();
         return (0, response_1.successResponse)(200, 'saved post removed', saveUser);
+    }
+    async deletePost(id) {
+        const user = await this.postsModel.findByIdAndRemove(id);
+        return (0, response_1.successResponse)(200, 'post deleted', user);
     }
 };
 exports.PostService = PostService = __decorate([

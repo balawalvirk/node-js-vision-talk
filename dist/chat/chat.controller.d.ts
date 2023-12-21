@@ -70,4 +70,10 @@ export declare class ChatController {
         message: any;
         data: any;
     }>;
+    removeSession(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

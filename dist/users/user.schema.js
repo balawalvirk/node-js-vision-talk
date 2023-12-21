@@ -148,6 +148,10 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "phoneNumber", void 0);
 __decorate([
+    (0, mongoose_1.Prop)(),
+    __metadata("design:type", String)
+], User.prototype, "tutorialVideo", void 0);
+__decorate([
     (0, mongoose_1.Prop)({ type: lifeGoalsSchema }),
     __metadata("design:type", LifeGoals)
 ], User.prototype, "lifeGoals", void 0);

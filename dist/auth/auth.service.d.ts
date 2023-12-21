@@ -199,6 +199,7 @@ export declare class AuthService {
         avatar: string;
         degree: string;
         phoneNumber: string;
+        tutorialVideo: string;
         lifeGoals: import("mongoose").FlattenMaps<{
             physical: string;
             emotional: string;

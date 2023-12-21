@@ -40,4 +40,10 @@ export declare class UsersService extends BaseService<UserDocument> {
         message: any;
         data: any;
     }>;
+    deleteUser(userId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

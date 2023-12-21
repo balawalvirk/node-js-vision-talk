@@ -74,4 +74,10 @@ export declare class ChatService {
         message: any;
         data: any;
     }>;
+    deleteSession(userId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

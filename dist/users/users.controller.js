@@ -38,6 +38,9 @@ let UsersController = exports.UsersController = class UsersController {
     async update(file, updateUserDto, user) {
         return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, Object.assign(Object.assign({}, updateUserDto), { avatar: (file === null || file === void 0 ? void 0 : file.location) || user.avatar }));
     }
+    async updateTutorialVideo(user, file) {
+        return await this.usersService.findOneRecordAndUpdate({ _id: user._id }, { tutorialVideo: (file === null || file === void 0 ? void 0 : file.location) || user.tutorialVideo });
+    }
     async addFollower(body, req) {
         return await this.usersService.addFollower(req.user._id, body);
     }
@@ -55,6 +58,9 @@ let UsersController = exports.UsersController = class UsersController {
     }
     async getUserById(id) {
         return await this.usersService.getUserById(id);
+    }
+    async deleteProfile(req) {
+        return await this.usersService.deleteUser(req.user._id);
     }
 };
 __decorate([
@@ -75,6 +81,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, update_user_dto_1.UpdateUserDto, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
+__decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
+    (0, common_1.Put)('update-tutorial-video'),
+    __param(0, (0, helpers_1.CurrentUser)()),
+    __param(1, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: false }))),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "updateTutorialVideo", null);
 __decorate([
     (0, common_1.Post)('follower'),
     __param(0, (0, common_1.Body)()),
@@ -121,6 +136,13 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserById", null);
+__decorate([
+    (0, common_1.Delete)('/'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteProfile", null);
 exports.UsersController = UsersController = __decorate([
     (0, common_1.Controller)('users'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),

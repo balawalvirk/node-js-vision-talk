@@ -19,3 +19,9 @@ export declare class CreatePostFilterDto {
 export declare class SavePostDto {
     post: any;
 }
+export declare class UpdatePostDto {
+    caption: any;
+    category: any;
+    type: any;
+    is_created_by_admin: any;
+}

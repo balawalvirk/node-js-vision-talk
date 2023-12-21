@@ -140,7 +140,7 @@ let ChatService = exports.ChatService = class ChatService {
     async createSession(userId, body) {
         const previousSession = await this.contactsModel.findOne({
             $or: [{ user: userId, contact: body.contact },
-                { user: userId, contact: body.contact }]
+                { user: body.contact, contact: userId }]
         });
         if (previousSession)
             return (0, response_1.successResponse)(200, 'session', previousSession);
@@ -209,6 +209,12 @@ let ChatService = exports.ChatService = class ChatService {
             .sort({ date_created: -1 })
             .lean();
         return (0, response_1.successResponse)(200, 'chat message', chatMessages);
+    }
+    async deleteSession(userId) {
+        const previousSession = await this.contactsModel.findOneAndRemove({
+            $or: [{ user: userId }, { contact: userId }]
+        });
+        return (0, response_1.successResponse)(200, 'session', previousSession);
     }
 };
 exports.ChatService = ChatService = __decorate([

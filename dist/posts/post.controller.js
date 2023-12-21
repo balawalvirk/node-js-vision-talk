@@ -29,6 +29,10 @@ let PostController = exports.PostController = class PostController {
         const response = await this.postService.create(body, file.location, req.user._id);
         return response;
     }
+    async update(file, body, req) {
+        const response = await this.postService.updatePost(body, file && file.location, req.params.id);
+        return response;
+    }
     async getPostDetails(id, type, req) {
         const response = await this.postService.getPostDetails(req.user._id, id, type);
         return response;
@@ -83,6 +87,9 @@ let PostController = exports.PostController = class PostController {
         const response = await this.postService.getFilteredPosts(req.user._id, Object.assign({ allCategories: categories }, body));
         return response;
     }
+    async deletePost(req) {
+        return await this.postService.deletePost(req.params.id);
+    }
 };
 __decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
@@ -96,6 +103,18 @@ __decorate([
     __metadata("design:paramtypes", [Object, posts_dto_1.CreatePostDto, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "create", null);
+__decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
+    (0, common_1.Put)('/:id'),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({
+        fileIsRequired: false,
+    }))),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, posts_dto_1.UpdatePostDto, Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "update", null);
 __decorate([
     (0, common_1.Get)('/:id/type/:type/details'),
     __param(0, (0, common_1.Param)('id')),
@@ -190,6 +209,13 @@ __decorate([
     __metadata("design:paramtypes", [posts_dto_1.CreatePostFilterDto, Object]),
     __metadata("design:returntype", Promise)
 ], PostController.prototype, "getInspiredFromPeers", null);
+__decorate([
+    (0, common_1.Delete)('/:id'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], PostController.prototype, "deletePost", null);
 exports.PostController = PostController = __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Controller)('post'),

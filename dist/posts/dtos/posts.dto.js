@@ -9,7 +9,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SavePostDto = exports.CreatePostFilterDto = exports.CreatePostComment = exports.CreatePostDto = void 0;
+exports.UpdatePostDto = exports.SavePostDto = exports.CreatePostFilterDto = exports.CreatePostComment = exports.CreatePostDto = void 0;
 const class_validator_1 = require("class-validator");
 const posts_enum_1 = require("../../enums/posts.enum");
 const class_transformer_1 = require("class-transformer");
@@ -97,4 +97,30 @@ __decorate([
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", Object)
 ], SavePostDto.prototype, "post", void 0);
+class UpdatePostDto {
+}
+exports.UpdatePostDto = UpdatePostDto;
+__decorate([
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], UpdatePostDto.prototype, "caption", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(posts_enum_1.PostCategoryEnum),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], UpdatePostDto.prototype, "category", void 0);
+__decorate([
+    (0, class_validator_1.IsEnum)(posts_enum_1.PostTypeEnum),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", Object)
+], UpdatePostDto.prototype, "type", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_transformer_1.Transform)(({ obj, key }) => {
+        return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+    }),
+    (0, class_validator_1.IsBoolean)(),
+    __metadata("design:type", Object)
+], UpdatePostDto.prototype, "is_created_by_admin", void 0);
 //# sourceMappingURL=posts.dto.js.map

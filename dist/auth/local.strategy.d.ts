@@ -193,6 +193,7 @@ export declare class LocalStrategy extends LocalStrategy_base {
         avatar: string;
         degree: string;
         phoneNumber: string;
+        tutorialVideo: string;
         lifeGoals: import("mongoose").FlattenMaps<{
             physical: string;
             emotional: string;
