@@ -52,6 +52,12 @@ export declare class ChatController {
         message: any;
         data: any;
     }>;
+    getRecommendedGroups(req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     getGroupMessages(sessionId: string): Promise<{
         success: boolean;
         statusCode: any;

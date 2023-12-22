@@ -142,7 +142,7 @@ export class ChatService {
 
     async createGroup(userId: string, body: CreateGroupDto, avatar: string) {
         (body.users).push(userId.toString());
-        const group = new this.groupsModel({users: body.users, name: body.name, avatar,createdBy:userId});
+        const group = new this.groupsModel({users: body.users, name: body.name, avatar, createdBy: userId});
         const saveGroup = await group.save();
 
         return successResponse(200, 'create group', saveGroup);
@@ -170,7 +170,6 @@ export class ChatService {
     }
 
 
-
     async removeUserFromGroup(userId: string, groupId: string, body: AddRemoveUserGroupDto) {
 
         const group = await this.groupsModel.findById(groupId);
@@ -183,7 +182,7 @@ export class ChatService {
         if (findIndex === -1)
             return errorResponse(400, 'user is not in group');
 
-        (group.users).splice(findIndex,1);
+        (group.users).splice(findIndex, 1);
 
 
         const saveGroup = await group.save();
@@ -299,6 +298,25 @@ export class ChatService {
         })
 
         return successResponse(200, 'session', previousSession);
+    }
+
+
+    async getRecommendedGroups(userId: string) {
+
+        const followersFollowingsList = (await this.usersModel.find({
+            $or: [
+                {followers: {$in: [new mongoose.Types.ObjectId(userId)]}},
+                {followings: {$in: [new mongoose.Types.ObjectId(userId)]}},
+            ]
+        }).select('_id')).map((u)=>u._id)
+
+        const groups=await this.groupsModel.find({createdBy:{$in:followersFollowingsList}})
+            .populate("createdBy", '_id firstName lastName email avatar connection_status last_seen', User.name)
+            .populate("users", '_id firstName lastName email avatar connection_status last_seen', User.name)
+            .sort({last_update: -1})
+
+
+        return successResponse(200, 'recommended groups', groups);
     }
 
 

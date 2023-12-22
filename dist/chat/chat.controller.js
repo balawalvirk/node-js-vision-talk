@@ -56,6 +56,10 @@ let ChatController = exports.ChatController = class ChatController {
         const response = await this.chatService.getUserGroups((req.user._id).toString());
         return response;
     }
+    async getRecommendedGroups(req) {
+        const response = await this.chatService.getRecommendedGroups((req.user._id).toString());
+        return response;
+    }
     async getGroupMessages(sessionId) {
         const response = await this.chatService.getGroupMessage(sessionId);
         return response;
@@ -140,6 +144,13 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "getUserGroups", null);
+__decorate([
+    (0, common_1.Get)('/group/recommended'),
+    __param(0, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getRecommendedGroups", null);
 __decorate([
     (0, common_1.Get)('/group-messages/:sessionId'),
     __param(0, (0, common_1.Param)('sessionId')),

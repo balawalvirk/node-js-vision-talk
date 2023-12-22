@@ -216,6 +216,19 @@ let ChatService = exports.ChatService = class ChatService {
         });
         return (0, response_1.successResponse)(200, 'session', previousSession);
     }
+    async getRecommendedGroups(userId) {
+        const followersFollowingsList = (await this.usersModel.find({
+            $or: [
+                { followers: { $in: [new mongoose_2.default.Types.ObjectId(userId)] } },
+                { followings: { $in: [new mongoose_2.default.Types.ObjectId(userId)] } },
+            ]
+        }).select('_id')).map((u) => u._id);
+        const groups = await this.groupsModel.find({ createdBy: { $in: followersFollowingsList } })
+            .populate("createdBy", '_id firstName lastName email avatar connection_status last_seen', user_schema_1.User.name)
+            .populate("users", '_id firstName lastName email avatar connection_status last_seen', user_schema_1.User.name)
+            .sort({ last_update: -1 });
+        return (0, response_1.successResponse)(200, 'recommended groups', groups);
+    }
 };
 exports.ChatService = ChatService = __decorate([
     (0, common_1.Injectable)(),

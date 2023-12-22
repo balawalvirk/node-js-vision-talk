@@ -90,6 +90,13 @@ export class ChatController {
         return response;
     }
 
+
+    @Get('/group/recommended')
+    async getRecommendedGroups(@Request() req) {
+        const response = await this.chatService.getRecommendedGroups((req.user._id).toString());
+        return response;
+    }
+
     @Get('/group-messages/:sessionId')
     async getGroupMessages(@Param('sessionId') sessionId: string) {
         const response = await this.chatService.getGroupMessage(sessionId);
