@@ -18,7 +18,7 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest
+    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 
 @UseGuards(JwtAuthGuard)
@@ -34,6 +34,25 @@ export class NewsletterController {
         {fileIsRequired: true,
         })) file: any,@Body() body: CreateNewsLetterDto,@Request() req) {
         const response = await this.newsletterService.createNewsLetter(body,file.location,req.user._id);
+        return response;
+    }
+
+
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
+    @Put('/:id')
+    async update(@UploadedFile(new ParseFilePipe(
+        {fileIsRequired: false,
+        })) file: any,@Body() body: UpdateNewsLetterDto,@Request() req) {
+        const response = await this.newsletterService.updateNewsLetter(body,file && file.location,req.params.id);
+        return response;
+    }
+
+
+    @Delete('/:id')
+    async delete(@UploadedFile(new ParseFilePipe(
+        {fileIsRequired: false,
+        })) file: any,@Request() req) {
+        const response = await this.newsletterService.deleteById(req.params.id);
         return response;
     }
 

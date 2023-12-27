@@ -14,7 +14,7 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto, SaveArticleDto,
+    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto,
     UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 import {NewsletterSubscriptionsDocument} from "src/newsletter/models/subscriptions.model";
@@ -44,6 +44,23 @@ export class NewsletterService {
         const newsletter = new this.newsletterModel({...body, image: fileName, user});
         const saveNewsletter = await newsletter.save();
         return successResponse(200, 'newsletter created', saveNewsletter);
+    }
+
+
+    async updateNewsLetter(body: UpdateNewsLetterDto, fileName: string, newsLetterId:string) {
+
+        let data:any={...body};
+
+        if(fileName)
+            data={...data,image:fileName};
+        const newsletter = await this.newsletterModel.findByIdAndUpdate(newsLetterId,data,{new:true});
+        return successResponse(200, 'newsletter updated', newsletter);
+    }
+
+
+    async deleteById(newsLetterId:string) {
+        const newsletter = await this.newsletterModel.findByIdAndDelete(newsLetterId);
+        return successResponse(200, 'newsletter deleted', newsletter);
     }
 
     async createArticle(body: CreateArticleDto, fileName: string, user: string, newspaperId) {

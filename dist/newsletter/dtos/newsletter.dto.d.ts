@@ -1,6 +1,11 @@
 export declare class CreateNewsLetterDto {
     title: any;
 }
+export declare class UpdateNewsLetterDto {
+    title: any;
+    details: any;
+    time: any;
+}
 export declare class CreateArticleDto {
     title: any;
     details: any;

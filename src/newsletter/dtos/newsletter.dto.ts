@@ -12,6 +12,25 @@ export class CreateNewsLetterDto {
 
 }
 
+
+export class UpdateNewsLetterDto {
+
+    @IsString()
+    @IsOptional()
+    title;
+
+    @IsString()
+    @IsNotEmpty()
+    details;
+
+
+
+    @IsString()
+    @IsNotEmpty()
+    time;
+
+}
+
 export class CreateArticleDto {
 
     @IsString()

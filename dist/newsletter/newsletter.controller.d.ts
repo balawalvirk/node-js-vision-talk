@@ -1,9 +1,21 @@
 import { NewsletterService } from "src/newsletter/newsletter.service";
-import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 export declare class NewsletterController {
     private newsletterService;
     constructor(newsletterService: NewsletterService);
     create(file: any, body: CreateNewsLetterDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    update(file: any, body: UpdateNewsLetterDto, req: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    delete(file: any, req: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

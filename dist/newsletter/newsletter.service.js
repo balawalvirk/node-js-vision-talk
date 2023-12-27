@@ -33,6 +33,17 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         const saveNewsletter = await newsletter.save();
         return (0, response_1.successResponse)(200, 'newsletter created', saveNewsletter);
     }
+    async updateNewsLetter(body, fileName, newsLetterId) {
+        let data = Object.assign({}, body);
+        if (fileName)
+            data = Object.assign(Object.assign({}, data), { image: fileName });
+        const newsletter = await this.newsletterModel.findByIdAndUpdate(newsLetterId, data, { new: true });
+        return (0, response_1.successResponse)(200, 'newsletter updated', newsletter);
+    }
+    async deleteById(newsLetterId) {
+        const newsletter = await this.newsletterModel.findByIdAndDelete(newsLetterId);
+        return (0, response_1.successResponse)(200, 'newsletter deleted', newsletter);
+    }
     async createArticle(body, fileName, user, newspaperId) {
         const newsletter = await this.newsletterModel.findById(newspaperId);
         if (!newsletter)

@@ -3,7 +3,7 @@ import { UserDocument } from "src/users/user.schema";
 import { NewsLetterDocument } from "src/newsletter/models/newsletter.model";
 import { NewsLetterLikeDocument } from "src/newsletter/models/likes.model";
 import { NewsLetterCommentDocument } from "src/newsletter/models/comments.model";
-import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 import { NewsletterSubscriptionsDocument } from "src/newsletter/models/subscriptions.model";
 import { ArticleDocument } from "src/newsletter/models/article.model";
 export declare class NewsletterService {
@@ -15,6 +15,18 @@ export declare class NewsletterService {
     private readonly newsletterSubscriptionRequestsModel;
     constructor(newsletterModel: Model<NewsLetterDocument>, articleModel: Model<ArticleDocument>, usersModel: Model<UserDocument>, newslettersLikeModel: Model<NewsLetterLikeDocument>, newsletterCommentsModel: Model<NewsLetterCommentDocument>, newsletterSubscriptionRequestsModel: Model<NewsletterSubscriptionsDocument>);
     createNewsLetter(body: CreateNewsLetterDto, fileName: string, user: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    updateNewsLetter(body: UpdateNewsLetterDto, fileName: string, newsLetterId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    deleteById(newsLetterId: string): Promise<{
         success: boolean;
         statusCode: any;
         message: any;
