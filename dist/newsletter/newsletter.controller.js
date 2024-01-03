@@ -35,8 +35,16 @@ let NewsletterController = exports.NewsletterController = class NewsletterContro
         const response = await this.newsletterService.deleteById(req.params.id);
         return response;
     }
+    async deleteArticle(file, req) {
+        const response = await this.newsletterService.deleteArticleById(req.params.id);
+        return response;
+    }
     async createArticle(file, body, req) {
         const response = await this.newsletterService.createArticle(body, file.location, req.user._id, req.params.id);
+        return response;
+    }
+    async updateArticle(file, body, req) {
+        const response = await this.newsletterService.updateArticle(body, file === null || file === void 0 ? void 0 : file.location, req.user._id, req.params.id, req.params.articleId);
         return response;
     }
     async getNewsLetterById(id, type, req) {
@@ -136,6 +144,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "delete", null);
 __decorate([
+    (0, common_1.Delete)('/article/:id'),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: false,
+    }))),
+    __param(1, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "deleteArticle", null);
+__decorate([
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
     (0, common_1.Post)('/:id/article'),
     __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: true,
@@ -146,6 +163,17 @@ __decorate([
     __metadata("design:paramtypes", [Object, newsletter_dto_1.CreateArticleDto, Object]),
     __metadata("design:returntype", Promise)
 ], NewsletterController.prototype, "createArticle", null);
+__decorate([
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', { storage: FileUploadToS3_1.default.uploadFile() })),
+    (0, common_1.Put)('/:id/article/:articleId'),
+    __param(0, (0, common_1.UploadedFile)(new common_1.ParseFilePipe({ fileIsRequired: false,
+    }))),
+    __param(1, (0, common_1.Body)()),
+    __param(2, (0, common_1.Request)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, newsletter_dto_1.UpdateArticleDto, Object]),
+    __metadata("design:returntype", Promise)
+], NewsletterController.prototype, "updateArticle", null);
 __decorate([
     (0, common_1.Get)('/:id/details'),
     __param(0, (0, common_1.Param)('id')),

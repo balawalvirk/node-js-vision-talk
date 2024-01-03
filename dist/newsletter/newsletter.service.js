@@ -44,6 +44,10 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         const newsletter = await this.newsletterModel.findByIdAndDelete(newsLetterId);
         return (0, response_1.successResponse)(200, 'newsletter deleted', newsletter);
     }
+    async deleteArticleById(articleId) {
+        const article = await this.articleModel.findByIdAndDelete(articleId);
+        return (0, response_1.successResponse)(200, 'article deleted', article);
+    }
     async createArticle(body, fileName, user, newspaperId) {
         const newsletter = await this.newsletterModel.findById(newspaperId);
         if (!newsletter)
@@ -51,6 +55,16 @@ let NewsletterService = exports.NewsletterService = class NewsletterService {
         const newsletterArticle = new this.articleModel(Object.assign(Object.assign({}, body), { image: fileName, user, newsletter: newspaperId }));
         const saveNewsletterArticle = await newsletterArticle.save();
         return (0, response_1.successResponse)(200, 'article created', saveNewsletterArticle);
+    }
+    async updateArticle(body, fileName, user, newspaperId, articleId) {
+        const newsletter = await this.newsletterModel.findById(newspaperId);
+        if (!newsletter)
+            return (0, response_1.errorResponse)(404, 'newsletter not found');
+        let data = Object.assign(Object.assign({}, body), { user, newsletter: newspaperId });
+        if (fileName)
+            data = Object.assign(Object.assign({}, body), { user, newsletter: newspaperId, image: fileName });
+        const newsletterArticle = await this.articleModel.findByIdAndUpdate(articleId, data, { new: true });
+        return (0, response_1.successResponse)(200, 'article update', newsletterArticle);
     }
     async getAllNewsPapers(userId) {
         const newsletters = await this.newsletterModel.aggregate([

@@ -14,7 +14,7 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto,
+    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateArticleDto, UpdateNewsLetterDto,
     UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 import {NewsletterSubscriptionsDocument} from "src/newsletter/models/subscriptions.model";
@@ -63,6 +63,12 @@ export class NewsletterService {
         return successResponse(200, 'newsletter deleted', newsletter);
     }
 
+
+    async deleteArticleById(articleId:string) {
+        const article = await this.articleModel.findByIdAndDelete(articleId);
+        return successResponse(200, 'article deleted', article);
+    }
+
     async createArticle(body: CreateArticleDto, fileName: string, user: string, newspaperId) {
 
         const newsletter = await this.newsletterModel.findById(newspaperId);
@@ -76,6 +82,22 @@ export class NewsletterService {
         return successResponse(200, 'article created', saveNewsletterArticle);
     }
 
+
+
+    async updateArticle(body: UpdateArticleDto, fileName: string, user: string, newspaperId,articleId) {
+
+        const newsletter = await this.newsletterModel.findById(newspaperId);
+
+        if (!newsletter)
+            return errorResponse(404, 'newsletter not found');
+
+        let data:any={...body, user, newsletter: newspaperId}
+        if(fileName)
+            data={...body, user, newsletter: newspaperId,image: fileName}
+
+        const newsletterArticle = await this.articleModel.findByIdAndUpdate(articleId,data,{new:true});
+        return successResponse(200, 'article update', newsletterArticle);
+    }
 
     async getAllNewsPapers(userId) {
         const newsletters = await this.newsletterModel.aggregate([

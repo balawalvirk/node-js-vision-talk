@@ -11,6 +11,11 @@ export declare class CreateArticleDto {
     details: any;
     time: any;
 }
+export declare class UpdateArticleDto {
+    title: any;
+    details: any;
+    time: any;
+}
 export declare class CreateNewsletterComment {
     message: any;
 }

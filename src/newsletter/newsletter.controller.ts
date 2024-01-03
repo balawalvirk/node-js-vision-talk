@@ -18,7 +18,11 @@ import {
     CreateArticleDto,
     CreateNewsletterComment,
     CreateNewsLetterDto,
-    CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest
+    CreateNewsletterSubscriptionDto,
+    SaveArticleDto,
+    UpdateArticleDto,
+    UpdateNewsLetterDto,
+    UpdateNewsletterSubscriptionStatusRequest
 } from "src/newsletter/dtos/newsletter.dto";
 
 @UseGuards(JwtAuthGuard)
@@ -57,6 +61,15 @@ export class NewsletterController {
     }
 
 
+    @Delete('/article/:id')
+    async deleteArticle(@UploadedFile(new ParseFilePipe(
+        {fileIsRequired: false,
+        })) file: any,@Request() req) {
+        const response = await this.newsletterService.deleteArticleById(req.params.id);
+        return response;
+    }
+
+
     @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
     @Post('/:id/article')
     async createArticle(@UploadedFile(new ParseFilePipe(
@@ -66,6 +79,16 @@ export class NewsletterController {
         return response;
     }
 
+
+    @UseInterceptors(FileInterceptor('file',{  storage: FileUploadToS3.uploadFile() }))
+    @Put('/:id/article/:articleId')
+    async updateArticle(@UploadedFile(new ParseFilePipe(
+        {fileIsRequired: false,
+        })) file: any,@Body() body: UpdateArticleDto,@Request() req) {
+        const response = await this.newsletterService.updateArticle(body,file?.location,req.user._id,req.params.id,
+            req.params.articleId);
+        return response;
+    }
 
     @Get('/:id/details')
     async getNewsLetterById(@Param('id') id: string,@Param('type') type: string,@Request() req) {

@@ -3,7 +3,7 @@ import { UserDocument } from "src/users/user.schema";
 import { NewsLetterDocument } from "src/newsletter/models/newsletter.model";
 import { NewsLetterLikeDocument } from "src/newsletter/models/likes.model";
 import { NewsLetterCommentDocument } from "src/newsletter/models/comments.model";
-import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
+import { CreateArticleDto, CreateNewsletterComment, CreateNewsLetterDto, CreateNewsletterSubscriptionDto, SaveArticleDto, UpdateArticleDto, UpdateNewsLetterDto, UpdateNewsletterSubscriptionStatusRequest } from "src/newsletter/dtos/newsletter.dto";
 import { NewsletterSubscriptionsDocument } from "src/newsletter/models/subscriptions.model";
 import { ArticleDocument } from "src/newsletter/models/article.model";
 export declare class NewsletterService {
@@ -32,7 +32,19 @@ export declare class NewsletterService {
         message: any;
         data: any;
     }>;
+    deleteArticleById(articleId: string): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
     createArticle(body: CreateArticleDto, fileName: string, user: string, newspaperId: any): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    updateArticle(body: UpdateArticleDto, fileName: string, user: string, newspaperId: any, articleId: any): Promise<{
         success: boolean;
         statusCode: any;
         message: any;

@@ -52,6 +52,28 @@ export class CreateArticleDto {
 }
 
 
+
+export class UpdateArticleDto {
+
+    @IsString()
+    @IsOptional()
+    title;
+
+
+
+    @IsString()
+    @IsOptional()
+    details;
+
+
+
+    @IsString()
+    @IsOptional()
+    time;
+
+}
+
+
 export class CreateNewsletterComment {
 
     @IsString()
