@@ -18,6 +18,7 @@ const redisStore = require("cache-manager-redis-store");
 const chat_module_1 = require("./chat/chat.module");
 const socket_module_1 = require("./socket/socket.module");
 const newsletter_module_1 = require("./newsletter/newsletter.module");
+const file_module_1 = require("./file/file.module");
 let AppModule = exports.AppModule = class AppModule {
 };
 exports.AppModule = AppModule = __decorate([
@@ -37,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
             post_module_1.PostModule,
             chat_module_1.ChatModule,
             newsletter_module_1.NewsletterModule,
+            file_module_1.FileModule,
             socket_module_1.SocketModule
         ],
     })

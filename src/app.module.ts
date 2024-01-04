@@ -10,6 +10,7 @@ import * as redisStore from 'cache-manager-redis-store';
 import {ChatModule} from "src/chat/chat.module";
 import {SocketModule} from "src/socket/socket.module";
 import {NewsletterModule} from "src/newsletter/newsletter.module";
+import {FileModule} from "src/file/file.module";
 
 @Module({
     imports: [
@@ -27,6 +28,7 @@ import {NewsletterModule} from "src/newsletter/newsletter.module";
         PostModule,
         ChatModule,
         NewsletterModule,
+        FileModule,
         SocketModule
     ],
 })
