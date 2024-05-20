@@ -83,7 +83,7 @@ export class User {
     @Prop({required: true, lowercase: true, trim: true})
     email: string;
 
-    @Prop({required: true})
+    @Prop({required: false})
     password: string;
 
     @Prop({trim: true})
