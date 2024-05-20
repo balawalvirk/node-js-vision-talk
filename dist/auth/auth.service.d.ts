@@ -26,22 +26,24 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { IEnvironmentVariables } from 'src/types';
 import { UsersService } from '../users/users.service';
-import { UserDocument } from 'src/users/user.schema';
+import { User, UserDocument } from 'src/users/user.schema';
 import { FilterQuery, Model } from 'mongoose';
 import { Otp, OtpDocument } from './otp.schema';
+import { LoginWithSocialDto } from "src/auth/dtos/login";
 export declare class AuthService {
     private readonly usersService;
     private readonly jwtService;
     private readonly configService;
     private otpModal;
-    constructor(usersService: UsersService, jwtService: JwtService, configService: ConfigService<IEnvironmentVariables>, otpModal: Model<OtpDocument>);
+    private userModal;
+    constructor(usersService: UsersService, jwtService: JwtService, configService: ConfigService<IEnvironmentVariables>, otpModal: Model<OtpDocument>, userModal: Model<UserDocument>);
     validateUser(email: string, pass: string): Promise<{
         _id: import("mongoose").Types.ObjectId;
         __v?: any;
-        $assertPopulated: <Paths = {}>(path: string | string[], values?: Partial<Paths>) => Omit<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        $assertPopulated: <Paths = {}>(path: string | string[], values?: Partial<Paths>) => Omit<import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>, keyof Paths> & Paths;
-        $clone: () => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        $clone: () => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
         $getAllSubdocs: () => import("mongoose").Document<any, any, any>[];
@@ -49,7 +51,7 @@ export declare class AuthService {
         $isDefault: (path: string) => boolean;
         $isDeleted: (val?: boolean) => boolean;
         $getPopulatedDocs: () => import("mongoose").Document<any, any, any>[];
-        $inc: (path: string | string[], val?: number) => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        $inc: (path: string | string[], val?: number) => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
         $isEmpty: (path: string) => boolean;
@@ -62,13 +64,13 @@ export declare class AuthService {
         $op: "remove" | "save" | "validate";
         $session: (session?: import("mongodb").ClientSession) => import("mongodb").ClientSession;
         $set: {
-            (path: string | Record<string, any>, val: any, type: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (path: string | Record<string, any>, val: any, type: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
-            (path: string | Record<string, any>, val: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (path: string | Record<string, any>, val: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
-            (value: string | Record<string, any>): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (value: string | Record<string, any>): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
         };
@@ -76,24 +78,24 @@ export declare class AuthService {
         baseModelName?: string;
         collection: import("mongoose").Collection<import("bson").Document>;
         db: import("mongoose").FlattenMaps<import("mongoose").Connection>;
-        deleteOne: (options?: import("mongoose").QueryOptions<unknown>) => Promise<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        deleteOne: (options?: import("mongoose").QueryOptions<unknown>) => Promise<import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>>;
-        depopulate: (path?: string | string[]) => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        depopulate: (path?: string | string[]) => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
         directModifiedPaths: () => string[];
         equals: (doc: import("mongoose").Document<unknown, any, any>) => boolean;
         errors?: import("mongoose").Error.ValidationError;
         get: (path: string, type?: any, options?: any) => any;
-        getChanges: () => import("mongoose").UpdateQuery<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        getChanges: () => import("mongoose").UpdateQuery<import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>>;
         id?: any;
-        increment: () => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        increment: () => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
-        init: (obj: import("mongoose").AnyObject, opts?: import("mongoose").AnyObject) => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        init: (obj: import("mongoose").AnyObject, opts?: import("mongoose").AnyObject) => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
         invalidate: (path: string, errorMsg: string | NativeError, value?: any, kind?: string) => NativeError;
@@ -107,25 +109,25 @@ export declare class AuthService {
         modifiedPaths: (options?: {
             includeChildren?: boolean;
         }) => string[];
-        overwrite: (obj: import("mongoose").AnyObject) => import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        overwrite: (obj: import("mongoose").AnyObject) => import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>;
         $parent: () => import("mongoose").Document<any, any, any>;
         populate: {
-            <Paths_1 = {}>(path: string | import("mongoose").PopulateOptions | (string | import("mongoose").PopulateOptions)[]): Promise<import("mongoose").MergeType<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            <Paths_1 = {}>(path: string | import("mongoose").PopulateOptions | (string | import("mongoose").PopulateOptions)[]): Promise<import("mongoose").MergeType<import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>, Paths_1>>;
-            <Paths_2 = {}>(path: string, select?: string | import("mongoose").AnyObject, model?: Model<any, {}, {}, {}, any, any>, match?: import("mongoose").AnyObject, options?: import("mongoose").PopulateOptions): Promise<import("mongoose").MergeType<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            <Paths_2 = {}>(path: string, select?: string | import("mongoose").AnyObject, model?: Model<any, {}, {}, {}, any, any>, match?: import("mongoose").AnyObject, options?: import("mongoose").PopulateOptions): Promise<import("mongoose").MergeType<import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>, Paths_2>>;
         };
         populated: (path: string) => any;
-        replaceOne: (replacement?: import("mongoose").AnyObject, options?: import("mongoose").QueryOptions<unknown>) => import("mongoose").Query<any, import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        replaceOne: (replacement?: import("mongoose").AnyObject, options?: import("mongoose").QueryOptions<unknown>) => import("mongoose").Query<any, import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
-        }, never>, {}, import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        }, never>, {}, import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>, "find">;
-        save: (options?: import("mongoose").SaveOptions) => Promise<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        save: (options?: import("mongoose").SaveOptions) => Promise<import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>>;
         schema: import("mongoose").FlattenMaps<import("mongoose").Schema<any, Model<any, any, any, any, any, any>, {}, {}, {}, {}, import("mongoose").DefaultSchemaOptions, {
@@ -138,25 +140,25 @@ export declare class AuthService {
             _id: unknown;
         }>, never>>>;
         set: {
-            (path: string | Record<string, any>, val: any, type: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (path: string | Record<string, any>, val: any, type: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
-            (path: string | Record<string, any>, val: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (path: string | Record<string, any>, val: any, options?: import("mongoose").DocumentSetOptions): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
-            (value: string | Record<string, any>): import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+            (value: string | Record<string, any>): import("mongoose").Document<unknown, {}, User> & Omit<User & {
                 _id: import("mongoose").Types.ObjectId;
             }, never>;
         };
         toJSON: {
-            <T = import("src/users/user.schema").User & {
+            <T = User & {
                 _id: import("mongoose").Types.ObjectId;
             }>(options?: import("mongoose").ToObjectOptions<import("mongoose").Document<unknown, {}, unknown> & Omit<Required<{
                 _id: unknown;
             }>, never>> & {
                 flattenMaps?: true;
             }): import("mongoose").FlattenMaps<T>;
-            <T_1 = import("src/users/user.schema").User & {
+            <T_1 = User & {
                 _id: import("mongoose").Types.ObjectId;
             }>(options: import("mongoose").ToObjectOptions<import("mongoose").Document<unknown, {}, unknown> & Omit<Required<{
                 _id: unknown;
@@ -164,17 +166,17 @@ export declare class AuthService {
                 flattenMaps: false;
             }): T_1;
         };
-        toObject: <T_2 = import("src/users/user.schema").User & {
+        toObject: <T_2 = User & {
             _id: import("mongoose").Types.ObjectId;
         }>(options?: import("mongoose").ToObjectOptions<import("mongoose").Document<unknown, {}, unknown> & Omit<Required<{
             _id: unknown;
         }>, never>>) => import("mongoose").Require_id<T_2>;
         unmarkModified: (path: string) => void;
-        updateOne: (update?: import("mongoose").UpdateWithAggregationPipeline | import("mongoose").UpdateQuery<import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        updateOne: (update?: import("mongoose").UpdateWithAggregationPipeline | import("mongoose").UpdateQuery<import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
-        }, never>>, options?: import("mongoose").QueryOptions<unknown>) => import("mongoose").Query<any, import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        }, never>>, options?: import("mongoose").QueryOptions<unknown>) => import("mongoose").Query<any, import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
-        }, never>, {}, import("mongoose").Document<unknown, {}, import("src/users/user.schema").User> & Omit<import("src/users/user.schema").User & {
+        }, never>, {}, import("mongoose").Document<unknown, {}, User> & Omit<User & {
             _id: import("mongoose").Types.ObjectId;
         }, never>, "find">;
         validate: {
@@ -251,4 +253,16 @@ export declare class AuthService {
     }, never> & Required<{
         _id: import("mongoose").Types.ObjectId;
     }>, never>>;
+    loginGoogle(payload: LoginWithSocialDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    facebookLogin(payload: LoginWithSocialDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
 }

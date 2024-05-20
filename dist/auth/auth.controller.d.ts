@@ -30,6 +30,7 @@ import { RegisterDto } from './dtos/register.dto';
 import { ResetPasswordDto } from './dtos/reset-pass.dto';
 import { EmailService } from 'src/helpers/services/email.service';
 import { ForgotPasswordDto } from './dtos/forgot-pass.dto';
+import { LoginWithSocialDto } from "src/auth/dtos/login";
 export declare class AuthController {
     private readonly authService;
     private readonly userService;
@@ -56,5 +57,17 @@ export declare class AuthController {
     }>;
     resetPassword({ password, otp }: ResetPasswordDto): Promise<{
         message: string;
+    }>;
+    loginWithGoogle(body: LoginWithSocialDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
+    }>;
+    loginWithApple(body: LoginWithSocialDto): Promise<{
+        success: boolean;
+        statusCode: any;
+        message: any;
+        data: any;
     }>;
 }

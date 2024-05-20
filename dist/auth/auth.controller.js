@@ -25,6 +25,7 @@ const email_service_1 = require("../helpers/services/email.service");
 const forgot_pass_dto_1 = require("./dtos/forgot-pass.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const FileUploadToS3_1 = require("../utils/FileUploadToS3");
+const login_1 = require("./dtos/login");
 let AuthController = exports.AuthController = class AuthController {
     constructor(authService, userService, emailService) {
         this.authService = authService;
@@ -72,6 +73,14 @@ let AuthController = exports.AuthController = class AuthController {
         await this.userService.findOneRecordAndUpdate({ email: otpFound.email }, { password: await (0, bcrypt_1.hash)(password, 10) });
         return { message: 'Password changed successfully.' };
     }
+    async loginWithGoogle(body) {
+        const user = await this.authService.loginGoogle(body);
+        return user;
+    }
+    async loginWithApple(body) {
+        const user = await this.authService.facebookLogin(body);
+        return user;
+    }
 };
 __decorate([
     (0, common_1.UseGuards)(local_auth_guard_1.LocalAuthGuard),
@@ -104,6 +113,20 @@ __decorate([
     __metadata("design:paramtypes", [reset_pass_dto_1.ResetPasswordDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
+__decorate([
+    (0, common_1.Post)('/google'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_1.LoginWithSocialDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "loginWithGoogle", null);
+__decorate([
+    (0, common_1.Post)('/facebook'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [login_1.LoginWithSocialDto]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "loginWithApple", null);
 exports.AuthController = AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [auth_service_1.AuthService, users_service_1.UsersService, email_service_1.EmailService])

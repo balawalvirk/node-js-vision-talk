@@ -19,6 +19,7 @@ const auth_controller_1 = require("./auth.controller");
 const mongoose_1 = require("@nestjs/mongoose");
 const otp_schema_1 = require("./otp.schema");
 const email_service_1 = require("../helpers/services/email.service");
+const user_schema_1 = require("../users/user.schema");
 let AuthModule = exports.AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule = __decorate([
@@ -31,6 +32,7 @@ exports.AuthModule = AuthModule = __decorate([
                 signOptions: { expiresIn: '15d' },
             }),
             mongoose_1.MongooseModule.forFeature([{ name: otp_schema_1.Otp.name, schema: otp_schema_1.OtpSchema }]),
+            mongoose_1.MongooseModule.forFeature([{ name: user_schema_1.User.name, schema: user_schema_1.UserSchema }])
         ],
         providers: [auth_service_1.AuthService, local_strategy_1.LocalStrategy, jwt_strategy_1.JwtStrategy, email_service_1.EmailService],
         controllers: [auth_controller_1.AuthController],
