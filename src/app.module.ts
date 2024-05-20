@@ -18,7 +18,7 @@ import {FileModule} from "src/file/file.module";
         CacheModule.register({
             isGlobal: true,
             store:  redisStore as unknown as CacheStore,
-            host: 'localhost', //default host
+            host: '3.109.29.63', //default host
             port: 6379 //default port
         }),
         MongooseModule.forRoot(new ConfigService<IEnvironmentVariables>().get('MONGO_URI')),

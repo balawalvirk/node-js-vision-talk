@@ -28,7 +28,7 @@ exports.AppModule = AppModule = __decorate([
             common_1.CacheModule.register({
                 isGlobal: true,
                 store: redisStore,
-                host: 'localhost',
+                host: '3.109.29.63',
                 port: 6379
             }),
             mongoose_1.MongooseModule.forRoot(new config_1.ConfigService().get('MONGO_URI')),
