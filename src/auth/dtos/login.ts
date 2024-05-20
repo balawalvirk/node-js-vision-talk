@@ -9,3 +9,10 @@ export class LoginDto {
   @IsString()
   password: string;
 }
+
+
+export class LoginWithSocialDto {
+    @IsString()
+    token: string;
+
+}

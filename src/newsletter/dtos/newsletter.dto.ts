@@ -20,13 +20,13 @@ export class UpdateNewsLetterDto {
     title;
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     details;
 
 
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     time;
 
 }

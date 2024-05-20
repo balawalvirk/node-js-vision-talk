@@ -21,6 +21,7 @@ import {EmailService} from 'src/helpers/services/email.service';
 import {ForgotPasswordDto} from './dtos/forgot-pass.dto';
 import {FileInterceptor} from "@nestjs/platform-express";
 import FileUploadToS3 from "src/utils/FileUploadToS3";
+import {LoginWithSocialDto} from "src/auth/dtos/login";
 
 @Controller('auth')
 export class AuthController {
@@ -79,4 +80,25 @@ export class AuthController {
         await this.userService.findOneRecordAndUpdate({email: otpFound.email}, {password: await hash(password, 10)});
         return {message: 'Password changed successfully.'};
     }
+
+    @Post('/google')
+    async loginWithGoogle(@Body() body: LoginWithSocialDto) {
+
+        const user = await this.authService.loginGoogle(body);
+        return user;
+    }
+
+
+    @Post('/facebook')
+    async loginWithApple(@Body() body: LoginWithSocialDto) {
+
+        const user = await this.authService.facebookLogin(body);
+        return user;
+    }
+
+
+
+
+
+
 }
