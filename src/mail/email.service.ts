@@ -21,7 +21,7 @@ export class EmailService {
     }
 
     async create(payload: EmailDto) {
-        sendEmail(process.env.SUPPORT_EMAIL,payload.email,"Mariza Support","",
+        await sendEmail(process.env.SUPPORT_EMAIL,payload.email,"Mariza Support","",
             payload.text)
         return successResponse(200, 'email sended', {});
     }
