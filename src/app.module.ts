@@ -11,6 +11,7 @@ import {ChatModule} from "src/chat/chat.module";
 import {SocketModule} from "src/socket/socket.module";
 import {NewsletterModule} from "src/newsletter/newsletter.module";
 import {FileModule} from "src/file/file.module";
+import {EmailModule} from "src/mail/email.module";
 
 @Module({
     imports: [
@@ -22,14 +23,15 @@ import {FileModule} from "src/file/file.module";
             port: 6379 //default port
         }),
         MongooseModule.forRoot(new ConfigService<IEnvironmentVariables>().get('MONGO_URI')),
-        UsersModule,
-        AuthModule,
-        GoalsModule,
-        PostModule,
-        ChatModule,
-        NewsletterModule,
-        FileModule,
-        SocketModule
+        // UsersModule,
+        // AuthModule,
+        // GoalsModule,
+        // PostModule,
+        // ChatModule,
+        // NewsletterModule,
+        // FileModule,
+        // SocketModule,
+        EmailModule
     ],
 })
 export class AppModule {
