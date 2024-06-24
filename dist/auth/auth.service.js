@@ -100,6 +100,7 @@ let AuthService = exports.AuthService = class AuthService {
         try {
             const response = await axios_1.default.get(`${process.env.FACEBOOK_AUTH_URL}access_token=${payload.token}&debug=all&fields=id%2Cname%2Cemail%2Cfirst_name%2Clast_name
             &format=json&method=get&pretty=0&suppress_http_code=1`);
+            console.log(`${process.env.FACEBOOK_AUTH_URL}access_token=${payload.token}&debug=all&fields=id%2Cname%2Cemail%2Cfirst_name%2Clast_name&format=json&method=get&pretty=0&suppress_http_code=1`);
             const decoded = response.data;
             if (!decoded.email) {
                 return (0, response_1.errorResponse)(404, 'Invalid token.');

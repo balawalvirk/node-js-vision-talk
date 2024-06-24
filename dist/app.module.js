@@ -39,7 +39,7 @@ exports.AppModule = AppModule = __decorate([
             chat_module_1.ChatModule,
             newsletter_module_1.NewsletterModule,
             file_module_1.FileModule,
-            socket_module_1.SocketModule
+            socket_module_1.SocketModule,
         ],
     })
 ], AppModule);
