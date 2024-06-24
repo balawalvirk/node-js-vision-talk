@@ -23,15 +23,15 @@ import {EmailModule} from "src/mail/email.module";
             port: 6379 //default port
         }),
         MongooseModule.forRoot(new ConfigService<IEnvironmentVariables>().get('MONGO_URI')),
-        // UsersModule,
-        // AuthModule,
-        // GoalsModule,
-        // PostModule,
-        // ChatModule,
-        // NewsletterModule,
-        // FileModule,
-        // SocketModule,
-        EmailModule
+        UsersModule,
+        AuthModule,
+        GoalsModule,
+        PostModule,
+        ChatModule,
+        NewsletterModule,
+        FileModule,
+        SocketModule,
+        //EmailModule
     ],
 })
 export class AppModule {
