@@ -234,6 +234,7 @@ export declare class AuthService {
         savedPosts: any;
         connection_status: any;
         last_seen: any;
+        is_deleted: any;
     }>;
     login(user: UserDocument): Promise<{
         access_token: string;

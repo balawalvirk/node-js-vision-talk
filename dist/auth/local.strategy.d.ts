@@ -226,6 +226,7 @@ export declare class LocalStrategy extends LocalStrategy_base {
         savedPosts: any;
         connection_status: any;
         last_seen: any;
+        is_deleted: any;
     }>;
 }
 export {};

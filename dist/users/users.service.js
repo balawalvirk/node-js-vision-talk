@@ -142,7 +142,7 @@ let UsersService = exports.UsersService = class UsersService extends base_servic
         return (0, response_1.successResponse)(200, 'user', user[0]);
     }
     async deleteUser(userId) {
-        const user = await this.userModal.findByIdAndRemove(userId);
+        const user = await this.userModal.findByIdAndUpdate(userId, { is_deleted: true }, { new: true });
         return (0, response_1.successResponse)(200, 'user deleted', user);
     }
 };

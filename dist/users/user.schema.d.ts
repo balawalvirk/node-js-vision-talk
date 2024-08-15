@@ -48,6 +48,7 @@ export declare class User {
     savedPosts: any;
     connection_status: any;
     last_seen: any;
+    is_deleted: any;
 }
 export declare const UserSchema: mongoose.Schema<User, mongoose.Model<User, any, any, any, mongoose.Document<unknown, any, User> & Omit<User & {
     _id: mongoose.Types.ObjectId;

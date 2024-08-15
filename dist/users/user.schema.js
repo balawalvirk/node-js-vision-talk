@@ -207,6 +207,10 @@ __decorate([
     (0, mongoose_1.Prop)({ type: Date, default: Date.now }),
     __metadata("design:type", Object)
 ], User.prototype, "last_seen", void 0);
+__decorate([
+    (0, mongoose_1.Prop)({ type: Boolean, default: false }),
+    __metadata("design:type", Object)
+], User.prototype, "is_deleted", void 0);
 exports.User = User = User_1 = __decorate([
     (0, mongoose_1.Schema)({ timestamps: true })
 ], User);

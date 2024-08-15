@@ -48,6 +48,8 @@ let AuthService = exports.AuthService = class AuthService {
         const user = await this.usersService.findOne({ email });
         if (!user)
             return null;
+        if (user.is_deleted)
+            return null;
         const match = await (0, bcrypt_1.compare)(pass, user.password);
         if (!match)
             return null;

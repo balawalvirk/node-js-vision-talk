@@ -26,7 +26,7 @@ let JwtStrategy = exports.JwtStrategy = class JwtStrategy extends (0, passport_1
         this.usersService = usersService;
     }
     async validate(payload) {
-        return await this.usersService.findOneRecord({ _id: payload.sub });
+        return await this.usersService.findOneRecord({ _id: payload.sub, is_deleted: false });
     }
 };
 exports.JwtStrategy = JwtStrategy = __decorate([
