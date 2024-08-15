@@ -181,7 +181,7 @@ export class UsersService extends BaseService<UserDocument> {
 
 
     async deleteUser(userId: string) {
-        const user = await this.userModal.findByIdAndRemove(userId);
+        const user = await this.userModal.findByIdAndUpdate(userId,{is_deleted:true},{new:true});
         return successResponse(200, 'user deleted', user);
 
     }

@@ -164,6 +164,11 @@ export class User {
     @Prop({ type: Date,default:Date.now })
     last_seen;
 
+
+
+    @Prop({ type: Boolean,default:false })
+    is_deleted;
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
