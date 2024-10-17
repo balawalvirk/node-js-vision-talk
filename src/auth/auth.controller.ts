@@ -22,6 +22,7 @@ import {ForgotPasswordDto} from './dtos/forgot-pass.dto';
 import {FileInterceptor} from "@nestjs/platform-express";
 import FileUploadToS3 from "src/utils/FileUploadToS3";
 import {LoginWithSocialDto} from "src/auth/dtos/login";
+import {sendEmail} from "src/utils/email";
 
 @Controller('auth')
 export class AuthController {
@@ -67,7 +68,8 @@ export class AuthController {
             text: 'Hello World from NestJS Sendgrid',
             html: `<h1>password reset otp</h1> <br/> ${otp.otp} </br> This otp will expires in 5 minuutes`,
         };
-        await this.emailService.send(mail);
+        await sendEmail(process.env.SUPPORT_EMAIL,email,"Change Password request",`<h1>password reset otp</h1> <br/> ${otp.otp} </br> This otp will expires in 5 minuutes`,
+            `<h1>password reset otp</h1> <br/> ${otp.otp} </br> This otp will expires in 5 minuutes`);
         return {message: 'Otp sent to your email.'};
     }
 
